@@ -8,7 +8,7 @@ const PlayStoreLink =
   "https://play.google.com/store/apps/details?id=com.enatega.multivendor&hl=en_IE";
 const AppleStoreLink =
   "https://apps.apple.com/pk/app/enatega-multivendor/id1526488093";
-import Logo from "@/lib/utils/assets/svg/Logo";
+import WalimLogo from "@/lib/utils/assets/svg/WalimLogo";
 import { useTranslations } from "next-intl";
 
 const AppLinks = () => {
@@ -33,8 +33,13 @@ const AppLinks = () => {
 
   return (
     <div>
-      <div className="text-[20px] mb-4 font-extrabold text-white cursor-pointer" onClick={logoClickHandler}>
-        <Logo fillColor="#FFFFFFFF" darkmode="#FFFFFFFF" />
+      <div className="mb-4 cursor-pointer" onClick={logoClickHandler}>
+        <div className="flex items-center gap-2">
+          <WalimLogo className="h-12 w-12" />
+          <span className="text-2xl font-bold tracking-[0.22em] text-white">
+            WALIM
+          </span>
+        </div>
       </div>
 
       <div className="flex gap-2 flex-wrap">
