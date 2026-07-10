@@ -60,7 +60,7 @@ import { onUseLocalStorage } from '@/lib/utils/methods';
 
 // Styles
 import classes from './app-bar.module.css';
-import { AppLogo } from '@/lib/utils/assets/svgs/logo';
+import WalimLogo from '@/lib/utils/assets/svgs/walim-logo';
 import { useApolloClient, useQuery } from '@apollo/client';
 import { GET_RESTAURANT_PROFILE } from '@/lib/api/graphql';
 import { useLocale, useTranslations } from 'next-intl';
@@ -188,8 +188,14 @@ const AppTopbar = () => {
             <FontAwesomeIcon icon={faBars} />
           </button>
         </div>
-        <div onClick={() => onRedirectToPage('/admin/store/dashboard')}>
-          <AppLogo />
+        <div
+          onClick={() => onRedirectToPage('/admin/store/dashboard')}
+          className="flex items-center gap-2 cursor-pointer px-2"
+        >
+          <WalimLogo className="h-8 w-8" />
+          <span className="text-lg font-bold tracking-[0.22em] text-gray-900 dark:text-white">
+            WALIM
+          </span>
         </div>
       </div>
       <div className="hidden items-center space-x-1 md:flex">

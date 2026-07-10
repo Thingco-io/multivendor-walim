@@ -59,7 +59,7 @@ import { timeAgo } from '@/lib/utils/methods/timeAgo';
 
 // Styles
 import classes from './app-bar.module.css';
-import { AppLogo } from '@/lib/utils/assets/svgs/logo';
+import WalimLogo from '@/lib/utils/assets/svgs/walim-logo';
 import { useLocale, useTranslations } from 'next-intl';
 import { TLocale } from '@/lib/utils/types/locale';
 import { setUserLocale } from '@/lib/utils/methods/locale';
@@ -236,8 +236,14 @@ const AppTopbar = () => {
             <FontAwesomeIcon icon={faBars} />
           </button>
         </div>
-        <div onClick={() => onRedirectToPage('/home')}>
-          <AppLogo />
+        <div
+          onClick={() => onRedirectToPage('/home')}
+          className="flex items-center gap-2 cursor-pointer px-2"
+        >
+          <WalimLogo className="h-8 w-8" />
+          <span className="text-lg font-bold tracking-[0.22em] text-gray-900 dark:text-white">
+            WALIM
+          </span>
         </div>
       </div>
       <div className="hidden items-center space-x-5 md:flex">

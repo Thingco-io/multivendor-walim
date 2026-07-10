@@ -2,23 +2,27 @@
 
 'use client';
 
-// Core
-import Link from 'next/link';
-
 // Assets
-import { AppLogo } from '@/lib/utils/assets/svgs/logo';
+import { useRouter } from 'next/navigation';
+import WalimLogo from '@/lib/utils/assets/svgs/walim-logo';
 
 // Styles
 import classes from './app-bar.module.css';
 
 const AppTopbar = () => {
+  const router = useRouter();
+
   return (
     <div className={`${classes['layout-topbar']} dark:bg-dark-900`}>
       <div>
-        <div className="flex flex-row items-center gap-6">
-          <Link href="/" className="layout-topbar-log">
-            <AppLogo />
-          </Link>
+        <div
+          onClick={() => router.push('/')}
+          className="flex items-center gap-2 cursor-pointer "
+        >
+          <WalimLogo className="h-8 w-8" />
+          <span className="text-lg font-bold tracking-[0.22em] text-gray-900 dark:text-white">
+            WALIM
+          </span>
         </div>
       </div>
     </div>

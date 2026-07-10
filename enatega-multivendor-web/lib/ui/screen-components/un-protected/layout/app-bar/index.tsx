@@ -30,7 +30,7 @@ import useUser from "@/lib/hooks/useUser";
 import { useSearchUI } from "@/lib/context/search/search.context";
 import useNearByRestaurantsPreview from "@/lib/hooks/useNearByRestaurantsPreview";
 
-import Logo from "@/lib/utils/assets/svg/Logo";
+import WalimLogo from "@/lib/utils/assets/svg/WalimLogo";
 
 import { AnimatePresence, motion } from "framer-motion";
 
@@ -381,9 +381,12 @@ const AppTopbar = ({ handleModalToggle }: IAppBarProps) => {
                 {!isSearchFocused && (
                   <div
                     onClick={logoClickHandler}
-                    className="text-xl font-bold text-gray-900 dark:text-white"
+                    className="flex items-center gap-2 cursor-pointer"
                   >
-                    <Logo fillColor="#000000" darkmode="#FFFFFFFF" />
+                    <WalimLogo className="h-8 w-8" />
+                    <span className="text-lg font-bold tracking-[0.22em] text-gray-900 dark:text-white">
+                      WALIM
+                    </span>
                   </div>
                 )}
                 {!isSearchFocused && (
