@@ -28,12 +28,12 @@ const AppFooter = () => {
     links: [
       {
         label: t("Footer.enategaRider"),
-        link: "https://play.google.com/store/apps/details?id=com.enatega.multirider&hl=en",
+        link: "",
         internal: false,
       },
       {
         label: t("Footer.enategaRestaurant"),
-        link: "https://play.google.com/store/apps/details?id=multivendor.enatega.restaurant&hl=en",
+        link: "",
         internal: false,
       },
     ],
@@ -56,17 +56,17 @@ const AppFooter = () => {
       { label: t("Footer.blog"), link: "https://ninjascode.com/blog", internal: false },
       {
         label: t("Footer.instagram"),
-        link: "https://www.instagram.com/ninjascodeofficial?igsh=ajFoeGxud3FqYnd3",
+        link: "",
         internal: false,
       },
       {
         label: t("Footer.facebook"),
-        link: "https://www.facebook.com/enatega/",
+        link: "",
         internal: false,
       },
       {
         label: t("Footer.linkedIn"),
-        link: "https://www.linkedin.com/company/enatega/?originalSubdomain=pk",
+        link: "",
         internal: false,
       },
     ],
