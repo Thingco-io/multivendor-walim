@@ -45,9 +45,9 @@ const EnategaInfo: React.FC = () => {
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mt-[30px] mb-[30px]">
-        <HomeCard image={CustomerApp} heading={t('Apps.heading1')} subText={t('Apps.subHeading1')} link={"https://play.google.com/store/apps/details?id=com.enatega.multivendor&hl=en"}/>
-        <HomeCard image={RestaurantApp} heading={t('Apps.heading2')} subText={t('Apps.subHeading2')} link={"https://play.google.com/store/apps/details?id=multivendor.enatega.restaurant&hl=en"} />
-        <HomeCard image={RiderApp} heading={t('Apps.heading3')} subText={t('Apps.subHeading3')} link={"https://play.google.com/store/apps/details?id=com.enatega.multirider&hl=en"}/>
+        <HomeCard image={CustomerApp} heading={t('Apps.heading1')} subText={t('Apps.subHeading1')} link={""}/>
+        <HomeCard image={RestaurantApp} heading={t('Apps.heading2')} subText={t('Apps.subHeading2')} link={""} />
+        <HomeCard image={RiderApp} heading={t('Apps.heading3')} subText={t('Apps.subHeading3')} link={""}/>
       </div>
     </div>
   );
