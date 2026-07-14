@@ -20,19 +20,19 @@ const Help = props => {
   const [links, setLinks] = useState([
     {
       title: t('titleProductPage'),
-      url: 'https://enatega.com/enatega-multi-vendor/'
+      url: 'https://walim-multivendor-web.netlify.app/'
     },
     {
       title: t('titleDocs'),
-      url: 'https://enatega.com/multi-vendor-doc/'
+      url: 'https://walim-multivendor-web.netlify.app/'
     },
     {
       title: t('titleBlog'),
-      url: 'https://enatega.com/blog/'
+      url: ''
     },
     {
       title: t('titleAboutUs'),
-      url: 'https://ninjascode.com/about-us/'
+      url: ''
     }
   ])
 
@@ -49,21 +49,21 @@ const Help = props => {
       {
         title: t('titleProductPage'),
         url:
-          'https://enatega.com/enatega-multivendor-open-source-food-delivery-solution/'
+          ''
       },
       {
         title: t('titleDocs'),
-        url: 'https://enatega.com/multivendor-documentation/'
+        url: ''
       },
       {
         title: t('titleBlog'),
         url:
-          'https://enatega.com/blogs-enatega-open-source-food-delivery-solutions/'
+          ''
       },
       {
         title: t('titleAboutUs'),
 
-        url: 'https://ninjascode.com/'
+        url: ''
       }
     ])
   }, [])

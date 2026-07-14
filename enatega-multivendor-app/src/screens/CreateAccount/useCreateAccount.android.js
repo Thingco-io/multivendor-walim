@@ -17,6 +17,7 @@ import * as Linking from 'expo-linking'
 import { FlashMessage } from '../../ui/FlashMessage/FlashMessage'
 import analytics from '../../utils/analytics'
 import AuthContext from '../../context/Auth'
+import navigationService from '../../routes/navigationService'
 import { useTranslation } from 'react-i18next'
 import { GoogleSignin } from '@react-native-google-signin/google-signin'
 import {
@@ -152,7 +153,7 @@ export const useCreateAccount = () => {
   }
 
   const navigateToLogin = () => {
-    navigation.navigate('Login')
+    navigationService.navigate('Login')
   }
 
   const navigateToRegister = () => {

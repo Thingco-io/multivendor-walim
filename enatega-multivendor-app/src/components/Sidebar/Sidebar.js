@@ -10,6 +10,7 @@ import ThemeContext from '../../ui/ThemeContext/ThemeContext'
 import styles from './styles'
 import { FlashMessage } from '../../ui/FlashMessage/FlashMessage'
 import LogoutModal from './LogoutModal/LogoutModal'
+import navigationService from '../../routes/navigationService'
 
 import analytics from '../../utils/analytics'
 
@@ -116,9 +117,9 @@ function SidebBar(props) {
                 style={styles(currentTheme).iconContainer}
                 onPress={async () => {
                   if (dataItem.isAuth && !isLoggedIn) {
-                    props.navigation.navigate('CreateAccount')
+                    navigationService.navigate('CreateAccount')
                   } else {
-                    props.navigation.navigate(dataItem.navigateTo)
+                    navigationService.navigate(dataItem.navigateTo)
                   }
                 }}
                 icon={dataItem.icon}

@@ -453,7 +453,7 @@ function Cart(props) {
                   <TouchableOpacity
                     activeOpacity={0.7}
                     onPress={() => {
-                      props?.navigation.navigate({ name: 'CreateAccount' })
+                      navigationService.navigate('CreateAccount')
                     }}
                     style={styles(currentTheme).button}
                   >

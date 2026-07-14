@@ -248,8 +248,8 @@ function RightButton(props) {
           bolder
           onPress={() =>
             isLoggedIn && profile
-              ? navigation.navigate('Favourite')
-              : navigation.navigate('CreateAccount')
+              ? navigationService.navigate('Favourite')
+              : navigationService.navigate('CreateAccount')
           }
         /> */}
         {cartCount >= 0 && (
@@ -310,7 +310,7 @@ function HelpButton(props) {
         borderRadius: scale(10),
         margin: scale(5)
       }}
-      onPress={() => props?.navigation.navigate('Help')}
+      onPress={() => navigationService.navigate('Help')}
     >
       <TextDefault style={styles().rightButtonContainer} center small bold>
         {t('help')}

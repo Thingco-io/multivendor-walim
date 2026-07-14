@@ -143,7 +143,7 @@ const styles = (props = null) =>
       ...alignment.PRmedium,
     },
     seeReviewsBtn: {
-      backgroundColor: props != null ? props.newButtonBackground : '#F3FFEE',
+      backgroundColor: props != null ? props.newButtonBackground : '#FFE2D0',
       borderRadius: 4,
       paddingTop: 8,
       paddingBottom: 8,
@@ -167,7 +167,7 @@ const styles = (props = null) =>
       ...alignment.PRlarge
     },
     activeHeader: {
-      backgroundColor: props != null ? props.newButtonBackground : '#F3FFEE',
+      backgroundColor: props != null ? props.newButtonBackground : '#FFE2D0',
       borderRadius: scale(50),
     },
     heading: {

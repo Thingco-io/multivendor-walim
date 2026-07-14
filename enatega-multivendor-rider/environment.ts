@@ -10,22 +10,22 @@ const getEnvVars = (env = Updates.channel) => {
   }
   if (!__DEV__) {
     return {
-      GRAPHQL_URL: "https://enatega-api-staging-production.up.railway.app/graphql",
-      WS_GRAPHQL_URL: "wss://enatega-api-staging-production.up.railway.app/graphql",
+      GRAPHQL_URL: "https://server.thingco.io/graphql",
+      WS_GRAPHQL_URL: "wss://server.thingco.io/graphql",
       SENTRY_DSN:
         configuration?.riderAppSentryUrl ??
-        "https://e963731ba0f84e5d823a2bbe2968ea4d@o1103026.ingest.sentry.io/6135261",
+        "https://6489fc549ffef8174011164edea79bf2@o4511706525794304.ingest.de.sentry.io/4511733049458768",
       GOOGLE_MAPS_KEY: configuration?.googleApiKey,
       ENVIRONMENT: "production",
     };
   }
 
   return {
-    GRAPHQL_URL: "https://enatega-api-staging-production.up.railway.app/graphql",
-    WS_GRAPHQL_URL: "wss://enatega-api-staging-production.up.railway.app/graphql",
+     GRAPHQL_URL: "https://server.thingco.io/graphql",
+      WS_GRAPHQL_URL: "wss://server.thingco.io/graphql",
     SENTRY_DSN:
       configuration?.riderAppSentryUrl ??
-      "https://e963731ba0f84e5d823a2bbe2968ea4d@o1103026.ingest.sentry.io/6135261",
+       "https://6489fc549ffef8174011164edea79bf2@o4511706525794304.ingest.de.sentry.io/4511733049458768",
     GOOGLE_MAPS_KEY: configuration?.googleApiKey,
     ENVIRONMENT: "development",
   };

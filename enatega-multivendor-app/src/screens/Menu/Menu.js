@@ -33,6 +33,7 @@ import Spinner from '../../components/Spinner/Spinner'
 import MainModalize from '../../components/Main/Modalize/MainModalize'
 import { useMemo } from 'react'
 import NewRestaurantCard from '../../components/Main/RestaurantCard/NewRestaurantCard'
+import navigationService from '../../routes/navigationService'
 import { Modalize } from 'react-native-modalize'
 import Filters from '../../components/Filter/FilterSlider'
 import AppliedFilters from '../../components/Filter/AppliedFilters'
@@ -418,7 +419,7 @@ function Menu({ route, props }) {
             } else {
               const modal = modalRef.current
               modal?.close()
-              navigation.navigate({ name: 'CreateAccount' })
+              navigationService.navigate('CreateAccount')
             }
           }}
         >
