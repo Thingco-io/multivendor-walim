@@ -1,11 +1,11 @@
 {
   "expo": {
-    "name": "Enatega Multi",
-    "scheme": "enategamultivendor",
-    "version": "1.1.25",
-    "description": "Enatega is a starter kit food ordering app built in React Native using Expo for IOS and Android. It's made keeping good aesthetics in mind as well keeping the best coding practices in mind. Its fully customisable to easily help you in your next food delivery project. https://market.nativebase.io/view/react-native-food-delivery-backend-app",
-    "slug": "enategamultivendor",
-    "owner": "ninjas_code",
+    "name": "Walim",
+    "scheme": "walim",
+    "version": "1.0.0",
+    "description": "Walim is a starter kit food ordering app built in React Native using Expo for IOS and Android. It's made keeping good aesthetics in mind as well keeping the best coding practices in mind. Its fully customisable to easily help you in your next food delivery project. https://market.nativebase.io/view/react-native-food-delivery-backend-app",
+    "slug": "walim",
+    "owner": "thingco.io",
     "experiments": {
       "buildCacheProvider": "eas"
     },
@@ -34,7 +34,7 @@
       },
       "supportsTablet": true,
       "userInterfaceStyle": "automatic",
-      "bundleIdentifier": "com.enatega.multivendor",
+      "bundleIdentifier": "com.walim.multivendor",
       "icon": "./assets/icon.png",
       "config": {},
       "usesAppleSignIn": true,
@@ -44,7 +44,7 @@
         "NSUserTrackingUsageDescription": "Allow this app to collect app-related data that can be used for tracking you or your device.",
         "CFBundleURLTypes": [
           {
-            "CFBundleURLSchemes": ["com.googleusercontent.apps.650001300965-dkji7jutv8gc5m4n7cdg3nft87sauhn7"]
+            "CFBundleURLSchemes": ["com.googleusercontent.apps.182812840340-kgcb4880ufn2bg5vgr3gk04qbctske6q"]
           }
         ],
         "ITSAppUsesNonExemptEncryption": false
@@ -52,14 +52,14 @@
     },
     "notification": {
       "iosDisplayInForeground": true,
-      "color": "#90E36D",
+      "color": "#FE7F2D",
       "icon": "./assets/not-icon.png",
       "androidMode": "default",
-      "androidCollapsedTitle": "Enatega Multivendor"
+      "androidCollapsedTitle": "Walim Multivendor"
     },
     "android": {
-      "versionCode": 125,
-      "package": "com.enatega.multivendor",
+      "versionCode": 1,
+      "package": "com.walim.multivendor",
       "userInterfaceStyle": "automatic",
       "googleServicesFile": "./google-services.json",
       "splash": {
@@ -105,7 +105,7 @@
       [
         "expo-location",
         {
-          "locationAlwaysAndWhenInUsePermission": "Allow $Enatega Multivendor to use your location."
+          "locationAlwaysAndWhenInUsePermission": "Allow Walim Multivendor to use your location."
         }
       ],
       "expo-notifications",
@@ -117,14 +117,14 @@
     ],
     "extra": {
       "eas": {
-        "projectId": "331d4e5b-b12a-434a-92ec-d6d283dc0e46"
+        "projectId": "191324b9-0bb9-46dd-8ec2-6ff073a6dab8"
       }
     },
     "runtimeVersion": {
       "policy": "sdkVersion"
     },
     "updates": {
-      "url": "https://u.expo.dev/331d4e5b-b12a-434a-92ec-d6d283dc0e46"
+      "url": "https://u.expo.dev/191324b9-0bb9-46dd-8ec2-6ff073a6dab8"
     }
   }
 }

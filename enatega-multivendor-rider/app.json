@@ -1,9 +1,9 @@
 {
   "expo": {
-    "name": "Enatega Multivendor Rider",
-    "description": "Enatega is a starter kit food ordering app built in React Native using Expo for IOS and Android. It's made keeping good aesthetics in mind as well keeping the best coding practices in mind. Its fully customisable to easily help you in your next food delivery project. https://market.nativebase.io/view/react-native-food-delivery-backend-app",
-    "version": "1.1.84",
-    "slug": "food-delivery-rider-multivendor",
+    "name": "walim-rider-app",
+    "description": "Walim is a starter kit food ordering app built in React Native using Expo for IOS and Android. It's made keeping good aesthetics in mind as well keeping the best coding practices in mind. Its fully customisable to easily help you in your next food delivery project. https://market.nativebase.io/view/react-native-food-delivery-backend-app",
+    "version": "1.1.0",
+    "slug": "walim-rider-app",
     "orientation": "portrait",
     "splash": {
       "image": "./lib/assets/images/black.png",
@@ -14,7 +14,7 @@
     "assetBundlePatterns": [
       "lib/assets/**/*"
     ],
-    "scheme": "myapp",
+    "scheme": "walim-rider-app",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
     "plugins": [
@@ -22,8 +22,8 @@
       [
         "@sentry/react-native/expo",
         {
-          "organization": "ninjas-code",
-          "project": "enatega-rider-app",
+          "organization": "thing-c0",
+          "project": "walim-rider-app",
           "url": "https://sentry.io/"
         }
       ],
@@ -49,7 +49,7 @@
     ],
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.enatega.multirider",
+      "bundleIdentifier": "com.walim.rider",
       "config": {},
       "icon": "./lib/assets/images/icon.png",
       "infoPlist": {
@@ -72,7 +72,7 @@
       "config": {
         "googleMaps": {}
       },
-      "package": "com.enatega.multirider",
+      "package": "com.walim.rider",
       "icon": "./lib/assets/images/appIcon.png",
       "adaptiveIcon": {
         "foregroundImage": "./lib/assets/images/appIcon.png",
@@ -81,7 +81,7 @@
     },
     "extra": {
       "eas": {
-        "projectId": "9144a7fc-b205-464a-8fb6-64eb66fc8743"
+        "projectId": "e41c2a5a-5a1b-4eed-a64b-d4c6ca2e8632"
       }
     },
     "experiments": {

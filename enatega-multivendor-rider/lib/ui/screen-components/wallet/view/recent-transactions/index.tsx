@@ -40,7 +40,7 @@ export default function RecentTransaction({
           }
           color={
             transaction.status === "TRANSFERRED"
-              ? "#90E36D"
+              ? "#FE7F2D"
               : transaction.status === "PAID"
                 ? "orange"
                 : transaction.status === "CANCELLED"

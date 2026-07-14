@@ -1,41 +1,40 @@
 {
   "project_info": {
-    "project_number": "650001300965",
-    "firebase_url": "https://enatega-multivendor.firebaseio.com",
-    "project_id": "enatega-multivendor",
-    "storage_bucket": "enatega-multivendor.appspot.com"
+    "project_number": "182812840340",
+    "project_id": "thingco-f2f29",
+    "storage_bucket": "thingco-f2f29.firebasestorage.app"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:650001300965:android:e027e6c5c2074a426bc30c",
+        "mobilesdk_app_id": "1:182812840340:android:0b9ec32dc7685ca2243f81",
         "android_client_info": {
-          "package_name": "com.enatega.multirider"
+          "package_name": "com.walim.multivendor"
         }
       },
       "oauth_client": [
         {
-          "client_id": "650001300965-9ochl634tuvv6iguei6dl57jkmfto6r9.apps.googleusercontent.com",
+          "client_id": "182812840340-vvp8ccmldq7ukkkclrppft60q2gh2drd.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyA-Arn9vDqHen1EJimV8lJfNsYOBLNcIfg"
+          "current_key": "AIzaSyBue9e5ITsWAAp03eC_40vMX4xpgnbB6Zs"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "650001300965-9ochl634tuvv6iguei6dl57jkmfto6r9.apps.googleusercontent.com",
+              "client_id": "182812840340-vvp8ccmldq7ukkkclrppft60q2gh2drd.apps.googleusercontent.com",
               "client_type": 3
             },
             {
-              "client_id": "650001300965-dkji7jutv8gc5m4n7cdg3nft87sauhn7.apps.googleusercontent.com",
+              "client_id": "182812840340-kgcb4880ufn2bg5vgr3gk04qbctske6q.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
-                "bundle_id": "com.enatega.multivendor"
+                "bundle_id": "com.walim.multivendor"
               }
             }
           ]
@@ -44,42 +43,70 @@
     },
     {
       "client_info": {
-        "mobilesdk_app_id": "1:650001300965:android:6c9c0fedca09492b6bc30c",
+        "mobilesdk_app_id": "1:182812840340:android:8ce28a29ea4ab2cd243f81",
         "android_client_info": {
-          "package_name": "com.enatega.multivendor"
+          "package_name": "com.walim.rider"
         }
       },
       "oauth_client": [
         {
-          "client_id": "650001300965-fnumuadf66rhah0o1a9d7ci0fg8vuesv.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.enatega.multivendor",
-            "certificate_hash": "7fa9f5ce09bef5d511dd8823138aa6b1c21a8989"
-          }
-        },
-        {
-          "client_id": "650001300965-9ochl634tuvv6iguei6dl57jkmfto6r9.apps.googleusercontent.com",
+          "client_id": "182812840340-vvp8ccmldq7ukkkclrppft60q2gh2drd.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyA-Arn9vDqHen1EJimV8lJfNsYOBLNcIfg"
+          "current_key": "AIzaSyBue9e5ITsWAAp03eC_40vMX4xpgnbB6Zs"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "650001300965-9ochl634tuvv6iguei6dl57jkmfto6r9.apps.googleusercontent.com",
+              "client_id": "182812840340-vvp8ccmldq7ukkkclrppft60q2gh2drd.apps.googleusercontent.com",
               "client_type": 3
             },
             {
-              "client_id": "650001300965-dkji7jutv8gc5m4n7cdg3nft87sauhn7.apps.googleusercontent.com",
+              "client_id": "182812840340-kgcb4880ufn2bg5vgr3gk04qbctske6q.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
-                "bundle_id": "com.enatega.multivendor"
+                "bundle_id": "com.walim.multivendor"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:182812840340:android:23e9a41088647251243f81",
+        "android_client_info": {
+          "package_name": "com.walim.store"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "182812840340-vvp8ccmldq7ukkkclrppft60q2gh2drd.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBue9e5ITsWAAp03eC_40vMX4xpgnbB6Zs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "182812840340-vvp8ccmldq7ukkkclrppft60q2gh2drd.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "182812840340-kgcb4880ufn2bg5vgr3gk04qbctske6q.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.walim.multivendor"
               }
             }
           ]

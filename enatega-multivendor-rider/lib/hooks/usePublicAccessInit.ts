@@ -12,7 +12,7 @@ export const usePublicAccessInit = () => {
     const initPublicAccess = async () => {
       try {
         await fetchPublicAccessToken(
-          GRAPHQL_URL || "https://aws-server.enatega.com/graphql"
+          GRAPHQL_URL || "https://server.thingco.io/graphql"
         );
         console.log("✅ Public authentication initialized successfully");
       } catch (error) {

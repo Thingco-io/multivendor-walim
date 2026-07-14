@@ -19,7 +19,7 @@ const useEnvVars = (env = Updates.channel) => {
     AMPLITUDE_API_KEY: configuration?.appAmplitudeApiKey,
     GOOGLE_MAPS_KEY: configuration?.googleApiKey || sharedConfig.GOOGLE_MAPS_API_KEY,
     EXPO_CLIENT_ID: configuration?.expoClientID,
-    SENTRY_DSN: configuration?.customerAppSentryUrl ?? 'https://4213c02977911e1b75898c93cc5517fb@o1103026.ingest.us.sentry.io/4508662470803456',
+    SENTRY_DSN: configuration?.customerAppSentryUrl ?? 'https://5f1f7a25ce06c00a087cb35914c7611a@o4511706525794304.ingest.de.sentry.io/4511733050507344',
     TERMS_AND_CONDITIONS: configuration?.termsAndConditions,
     PRIVACY_POLICY: configuration?.privacyPolicy,
     TEST_OTP: configuration?.testOtp,

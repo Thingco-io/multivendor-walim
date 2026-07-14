@@ -27,9 +27,10 @@ import ThemeContext from '../../ui/ThemeContext/ThemeContext'
 import styles from './styles'
 import TextDefault from '../../components/Text/TextDefault/TextDefault'
 import { alignment } from '../../utils/alignment'
-import { useFocusEffect, useNavigation } from '@react-navigation/native'
+import { useFocusEffect } from '@react-navigation/native'
 import analytics from '../../utils/analytics'
 import { Entypo } from '@expo/vector-icons'
+import navigationService from '../../routes/navigationService'
 
 import { useTranslation } from 'react-i18next'
 import Spinner from '../../components/Spinner/Spinner'
@@ -53,7 +54,6 @@ const RESTAURANTS = gql`
 
 function Profile(props) {
   const Analytics = analytics()
-  const navigation = useNavigation()
   const { t, i18n } = useTranslation()
   const [toggleView, setToggleView] = useState(true)
   const [modelVisible, setModalVisible] = useState(false)
@@ -172,7 +172,7 @@ function Profile(props) {
                   styles(currentTheme).flexRow,
                   styles().padding
                 ]}
-                onPress={() => navigation.navigate('MyOrders')}
+                onPress={() => navigationService.navigate('MyOrders')}
               >
                 <View
                   style={{
@@ -226,7 +226,7 @@ function Profile(props) {
                       <View>
                         <TouchableOpacity
                           style={styles(currentTheme).seeAll}
-                          onPress={() => navigation.navigate('Favourite')}
+                          onPress={() => navigationService.navigate('Favourite')}
                         >
                           <TextDefault
                             H5
@@ -290,7 +290,7 @@ function Profile(props) {
                 <ButtonContainer
                   icon={'people-outline'}
                   iconType={'Ionicons'}
-                  onPress={() => navigation.navigate('Help')}
+                  onPress={() => navigationService.navigate('Help')}
                   title={t('CustomerSupport')}
                   currentTheme={currentTheme}
                 />
@@ -298,7 +298,7 @@ function Profile(props) {
                 <ButtonContainer
                   icon={'file-tray-stacked-outline'}
                   iconType={'Ionicons'}
-                  onPress={() => navigation.navigate('MyOrders')}
+                  onPress={() => navigationService.navigate('MyOrders')}
                   title={t('OrderHistory')}
                   currentTheme={currentTheme}
                 />
@@ -367,7 +367,7 @@ function Profile(props) {
                 <ButtonContainer
                   icon={'account-outline'}
                   iconType={'MaterialCommunityIcons'}
-                  onPress={() => navigation.navigate('Account')}
+                  onPress={() => navigationService.navigate('Account')}
                   title={t('Account')}
                   currentTheme={currentTheme}
                 />
@@ -375,7 +375,7 @@ function Profile(props) {
                 <ButtonContainer
                   icon={'location-outline'}
                   iconType={'Ionicons'}
-                  onPress={() => navigation.navigate('Addresses')}
+                  onPress={() => navigationService.navigate('Addresses')}
                   title={t('myAddresses')}
                   currentTheme={currentTheme}
                 />

@@ -63,7 +63,7 @@ const buildStyles = (props = null) =>
       gap: 10
     },
     seeAllBtn: {
-      backgroundColor: props != null ? props?.newButtonBackground : '#F3FFEE',
+      backgroundColor: props != null ? props?.newButtonBackground : '#FFE2D0',
       borderRadius: 4,
       paddingTop: 8,
       paddingBottom: 8,
