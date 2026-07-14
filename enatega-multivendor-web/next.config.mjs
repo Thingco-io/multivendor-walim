@@ -147,6 +147,10 @@ const nextConfig = {
       },
       {
         protocol: "https",
+        hostname: "walim-assets.s3.eu-central-1.amazonaws.com",
+      },
+      {
+        protocol: "https",
         hostname: "*.s3.*.amazonaws.com",
       },
     ], // Add placehold.co as an allowed domain
