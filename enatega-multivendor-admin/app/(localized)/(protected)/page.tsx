@@ -1,41 +1,53 @@
 'use client';
 
-// Core
 import { useRouter } from 'next/navigation';
-import { useContext, useEffect } from 'react';
+import { useContext, useEffect, useRef } from 'react';
 
-// Context
 import { SidebarContext } from '@/lib/context/global/sidebar.context';
-
-// Interface & Types
 import { ISidebarContextProps } from '@/lib/utils/interfaces';
 import { DEFAULT_ROUTES } from '@/lib/utils/constants/routes';
-import { useUserContext } from '@/lib/hooks/useUser';
+import {
+  getAccessToken,
+  getStoredUser,
+} from '@/lib/utils/methods/auth';
 import CustomLoader from '@/lib/ui/useable-components/custom-progress-indicator';
 
 export default function RootPage() {
-  // Context
-  const { setSelectedItem } = useContext<ISidebarContextProps>(SidebarContext);
-  const { user, loading, isSessionVerified } = useUserContext();
-
-  // Hooks
   const router = useRouter();
+  const redirected = useRef(false);
 
-  // Effects
+  const sidebar =
+    useContext<ISidebarContextProps>(SidebarContext);
+
   useEffect(() => {
-    setSelectedItem({ screenName: 'Home' });
-    if (loading) return;
+    if (redirected.current) return;
 
-    if (isSessionVerified && user) {
-      router.push(DEFAULT_ROUTES[user.userType]);
-    } else {
-      router.replace('/authentication/login');
+    redirected.current = true;
+
+    sidebar?.setSelectedItem({
+      screenName: 'Home',
+    });
+
+    const storedUser = getStoredUser();
+    const accessToken = getAccessToken();
+
+    const hasSession =
+      !!accessToken ||
+      !!storedUser?.token;
+
+    if (
+      hasSession &&
+      storedUser?.userType &&
+      DEFAULT_ROUTES[storedUser.userType]
+    ) {
+      router.replace(
+        DEFAULT_ROUTES[storedUser.userType]
+      );
+      return;
     }
-  }, [isSessionVerified, loading, router, setSelectedItem, user]);
 
-  if (loading) {
-    return <CustomLoader />;
-  }
+    router.replace('/authentication/login');
+  }, [router, sidebar]);
 
-  return <></>;
+  return <CustomLoader />;
 }
