@@ -57,6 +57,10 @@ const nextConfig = {
       {
         protocol: 'https',
         hostname: 'assets.enatega.com',
+      },
+      {
+        protocol: 'https',
+        hostname: 'walim-assets.s3.eu-central-1.amazonaws.com',
       }
     ], // Add placehold.co as an allowed domain
   },

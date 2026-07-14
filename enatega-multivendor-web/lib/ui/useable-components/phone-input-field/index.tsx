@@ -71,8 +71,7 @@ export default function CustomPhoneTextField({
         className={`flex items-center ${className} ${style?.borderColor === "red" ? "phone-error" : ""} bg-white text-black dark:bg-gray-800 dark:text-white `}
       >
         <PhoneInput
-          country={"au"}
-          value={value ?? ""}
+          country={"sa"}          value={value ?? ""}
           onChange={handlePhoneInputChange}
           disableSearchIcon={true}
           searchPlaceholder="Search country"

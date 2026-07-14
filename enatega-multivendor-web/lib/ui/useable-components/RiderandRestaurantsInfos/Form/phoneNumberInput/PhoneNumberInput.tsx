@@ -7,7 +7,7 @@ const PhoneNumberInput = () => {
     <div>
       <PhoneInput
       // default country pakistan "pk"
-      country={"pk"}
+      country={"sa"}
      
       value={field.value}
       onChange={(value) => helpers.setValue(value)}
