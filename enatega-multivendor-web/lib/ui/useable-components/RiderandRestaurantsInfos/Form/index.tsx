@@ -55,7 +55,7 @@ const EmailForm: React.FC<formProps> = ({ heading, role }) => {
     };
 
     try {
-      await sendEmail("template_eogfh2k", templateParams);
+      await sendEmail("template_hm199jl", templateParams);
 
       showToast({
         type: "success",

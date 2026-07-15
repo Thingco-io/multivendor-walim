@@ -1,5 +1,5 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { EventEmitter } from "events";
+import { EventEmitter } from "eventemitter3";
 
 export const asyncStorageEmitter = new EventEmitter();
 

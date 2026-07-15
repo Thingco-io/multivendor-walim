@@ -29,7 +29,6 @@ import analytics from '../../utils/analytics'
 import MapSection from '../MapSection/index'
 import { useTranslation } from 'react-i18next'
 import useGeocoding from '../../ui/hooks/useGeocoding'
-import navigationService from '../../routes/navigationService'
 
 import useNetworkStatus from '../../utils/useNetworkStatus'
 import ErrorView from '../../components/ErrorView/ErrorView'
@@ -235,7 +234,7 @@ function Main(props) {
             } else {
               const modal = modalRef.current
               modal?.close()
-              navigationService.navigate('CreateAccount')
+              props?.navigation.navigate({ name: 'CreateAccount' })
             }
           }}
         >
