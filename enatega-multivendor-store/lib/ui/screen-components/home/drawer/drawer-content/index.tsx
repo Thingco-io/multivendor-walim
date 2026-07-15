@@ -153,7 +153,7 @@ export default function CustomDrawerContent(
         {/* EXTERNAL LINKS  */}
         <TouchableOpacity
           onPress={() => {
-            Linking.openURL("");
+            Linking.openURL("https://walim-multivendor-web.netlify.app");
           }}
           className="flex-row justify-between items-center px-4 py-4 border-b-[0.5px]"
           style={{ borderColor: appTheme.borderLineColor }}

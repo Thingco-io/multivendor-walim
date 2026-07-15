@@ -17,7 +17,6 @@ import * as Linking from 'expo-linking'
 import { FlashMessage } from '../../ui/FlashMessage/FlashMessage'
 import analytics from '../../utils/analytics'
 import AuthContext from '../../context/Auth'
-import navigationService from '../../routes/navigationService'
 import { useTranslation } from 'react-i18next'
 import * as WebBrowser from 'expo-web-browser'
 import * as Google from 'expo-auth-session/providers/google'
@@ -195,7 +194,7 @@ export const useCreateAccount = () => {
   }
 
   const navigateToLogin = () => {
-    navigationService.navigate('Login')
+    navigation.navigate('Login')
   }
 
   const navigateToRegister = () => {

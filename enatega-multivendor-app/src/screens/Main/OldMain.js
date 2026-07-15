@@ -190,7 +190,7 @@ function Main(props) {
             } else {
               const modal = modalRef.current
               modal?.close()
-              navigationService.navigate('CreateAccount')
+              props?.navigation.navigate({ name: 'CreateAccount' })
             }
           }}
         >

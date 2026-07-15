@@ -1,4 +1,4 @@
-# Walim Customer App
+# Enatega Customer App
 
 ## Requirements
 
