@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import NextImage, { ImageProps } from "next/image";
 
-const DIRECT_IMAGE_HOSTS = new Set(["assets.enatega.com"]);
+const DIRECT_IMAGE_HOSTS = new Set(["walim-assets.s3.eu-central-1.amazonaws.com"]);
 const FALLBACK_IMAGE_SRC = "/assets/images/png/freshGroceries.jpg";
 
 function shouldBypassOptimization(src: ImageProps['src']) {

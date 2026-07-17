@@ -1,14 +1,12 @@
 {
   "expo": {
-    "name": "walim-store-app",
+    "name": "Walim Restaurant",
     "slug": "walim-store-app",
     "description": "Walim is a starter kit food ordering app built in React Native using Expo for IOS and Android. It's made keeping good aesthetics in mind as well keeping the best coding practices in mind. Its fully customisable to easily help you in your next food delivery project. https://market.nativebase.io/view/react-native-food-delivery-backend-app",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./lib/assets/images/icon.png",
-    "assetBundlePatterns": [
-      "**/*"
-    ],
+    "assetBundlePatterns": ["**/*"],
     "scheme": "walim-store-app",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
@@ -33,19 +31,13 @@
       "expo-audio",
       "expo-video"
     ],
-    "platforms": [
-      "ios",
-      "android"
-    ],
+    "platforms": ["ios", "android"],
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.walim.store",
       "infoPlist": {
         "NSLocationWhenInUseUsageDescription": "$(PRODUCT_NAME) uses your location for features like finding orders nearby and tracking customer orders!",
-        "UIBackgroundModes": [
-          "audio",
-          "remote-notification"
-        ],
+        "UIBackgroundModes": ["audio", "remote-notification"],
         "ITSAppUsesNonExemptEncryption": false,
         "UIRequiresFullScreen": true,
         "NSBluetoothAlwaysUsageDescription": "We use Bluetooth to connect to your thermal printer.",
@@ -65,8 +57,8 @@
       ],
       "package": "com.walim.store",
       "adaptiveIcon": {
-        "foregroundImage": "./lib/assets/images/appIcon.png",
-        "backgroundColor": "#ffffff"
+        "foregroundImage": "./lib/assets/images/adaptive-icon.png",
+        "backgroundColor": "#EBD2C2"
       }
     },
     "extra": {
