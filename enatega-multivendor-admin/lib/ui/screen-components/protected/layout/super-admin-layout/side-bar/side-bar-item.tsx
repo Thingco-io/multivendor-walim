@@ -85,7 +85,7 @@ export default function SidebarItem({
             isActive && !subMenu
               ? `bg-${isClickable ? bg_color : ''} text-${isClickable ? text_color : '[#71717A]'}`
               : `bg-${bg_color} text-${text_color} hover:bg-secondary-color`
-          } ${!expanded && 'hidden sm:flex'} dark:text-white`}
+          } ${!expanded && 'hidden sm:flex'} dark:text-white hover:dark:text-[#71717A]`}
           onClick={() => {
             if (!isParent || isClickable) {
               if (
