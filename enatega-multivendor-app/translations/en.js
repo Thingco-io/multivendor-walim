@@ -670,4 +670,6 @@ export const en = {
   "ShopTypes":"Shop Types",
   "notificationPermissionDenied": "Please enable notifications in Settings to receive order updates and offers",
   "notificationTokenError": "Error setting up notifications. Please try again later",
+  howWasRider: 'How was your delivery?',
+  tellAboutDelivery: 'Tell us about your delivery experience',
 }

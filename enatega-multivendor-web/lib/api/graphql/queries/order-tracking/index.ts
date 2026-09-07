@@ -63,6 +63,8 @@ export const ORDER_TRACKING = gql`query OrderDetails($orderDetailsId: String!) {
     }
     rider{
       _id
+      name
+      phone
     }
     review {
       _id

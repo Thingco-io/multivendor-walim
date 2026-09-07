@@ -13,12 +13,29 @@ export interface IRatingModalProps {
   ) => void; // Callback for submitting rating
 }
 
+// Props interface for the rider RatingModal component. Mirrors
+// IRatingModalProps so the two steps of the feedback flow look and behave the
+// same; only the subject changes from the store to the delivery rider.
+export interface IRiderRatingModalProps {
+  visible: boolean;
+  onHide: () => void;
+  order: IOrder | null;
+  onSubmitRating: (
+    orderId: string | undefined,
+    rating: number,
+    comment?: string,
+    aspects?: string[]
+  ) => void;
+}
+
 // Props interface for the Second step component
 export interface IRenderStepTwoProps {
   selectedAspects: string[];
   handleAspectToggle: (aspect: string) => void;
   handleNext: () => void;
   handleSubmitDebounced: () => void;
+  // Overrides the default store aspects when rating a rider.
+  aspects?: string[];
 }
 
 
@@ -29,6 +46,8 @@ export interface IRenderStepThreeProps {
     handleSubmitDebounced: () => void;
     comment: string;
     setComment: (value: string) => void;
+    // Overrides the default store aspects when rating a rider.
+    aspects?: string[];
   }
 
 

@@ -14,6 +14,7 @@ import { IOrdersByRestaurantPaginatedResponse } from '@/lib/utils/interfaces/ord
 import { TOrderRowData } from '@/lib/utils/types';
 import { DataTableRowClickEvent } from 'primereact/datatable';
 import OrderDetailModal from '@/lib/ui/useable-components/popup-menu/order-details-modal';
+import AssignRiderDialog from '@/lib/ui/useable-components/assign-rider-dialog';
 import { useTranslations } from 'next-intl';
 import useDebounce from '@/lib/hooks/useDebounce';
 
@@ -32,9 +33,11 @@ export default function OrderVendorMain() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedRestaurant, setSelectedRestaurant] =
     useState<IExtendedOrder | null>(null);
+  // Order whose delivery the store is handing to a rider manually.
+  const [assignOrder, setAssignOrder] = useState<IExtendedOrder | null>(null);
   const debouncedSearch = useDebounce(searchTerm, 500);
 
-  const { data, error, loading } = useQueryGQL(
+  const { data, error, loading, refetch } = useQueryGQL(
     GET_ORDER_BY_RESTAURANT,
     {
       restaurant: restaurantId,
@@ -119,6 +122,19 @@ export default function OrderVendorMain() {
         visible={isModalOpen}
         onHide={() => setIsModalOpen(false)}
         restaurantData={selectedRestaurant}
+        onAssignRider={(order) => {
+          setIsModalOpen(false);
+          setAssignOrder(order);
+        }}
+      />
+      <AssignRiderDialog
+        visible={!!assignOrder}
+        onHide={() => setAssignOrder(null)}
+        orderId={assignOrder?._id ?? null}
+        orderNumber={assignOrder?.orderId ?? null}
+        storeId={restaurantId ?? null}
+        assignedRiderName={assignOrder?.rider?.name ?? null}
+        onAssigned={() => refetch?.()}
       />
       {error && (
         <p className="text-red-500">

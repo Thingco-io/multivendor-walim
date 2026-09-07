@@ -646,5 +646,6 @@ loginRequired: 'តម្រូវឲ្យចូល',
   "Applied Filters": "តម្រងត្រូវបានអនុវត្ត",
   "WhatsApp is not installed on the device": "WhatsApp មិនបានដំឡើងលើឧបករណ៍ទេ",
   "Install it": "ដំឡើងវា",
-
+  howWasRider: 'How was your delivery?',
+  tellAboutDelivery: 'Tell us about your delivery experience',
 }

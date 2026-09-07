@@ -26,25 +26,34 @@ const AspectButton = ({
   </Button>
 );
 
-// Render the aspects selection UI (reused in both step 2 and 3)
+// Render the aspects selection UI (reused in both step 2 and 3).
+// `aspects` lets the rider rating flow swap in delivery-specific options while
+// keeping the store flow's default list.
 function RenderAspects({
   selectedAspects,
   handleAspectToggle,
+  aspects = ratingAspects,
 }: {
   selectedAspects: string[]; // Array of selected aspects
   handleAspectToggle: (aspect: string) => void; // Toggle callback
+  aspects?: string[];
 }) {
   const t = useTranslations()
   return (
     <div className="flex flex-wrap justify-center gap-2 mb-4">
-      {ratingAspects?.map((aspect) => (
-        <AspectButton
-          key={aspect}
-          aspect={t(aspect)}
-          selected={selectedAspects.includes(aspect)}
-          onToggle={handleAspectToggle}
-        />
-      ))}
+      {aspects?.map((aspect) => {
+        // The toggle carries the translated label (that is what ends up in the
+        // review), so the selected check has to compare against it too.
+        const label = t(aspect);
+        return (
+          <AspectButton
+            key={aspect}
+            aspect={label}
+            selected={selectedAspects.includes(label)}
+            onToggle={handleAspectToggle}
+          />
+        );
+      })}
     </div>
   );
 }

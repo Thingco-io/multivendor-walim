@@ -621,4 +621,6 @@ export const ku = {
     "Applied Filters": 'فیلتەرە جێبەجێکراوەکان',
     "WhatsApp is not installed on the device": "واتسئاپ لەسەر ئامێرەکە دانەمەزراوە",
     "Install it": "دامەzrێنە",
-  };
+  howWasRider: 'How was your delivery?',
+  tellAboutDelivery: 'Tell us about your delivery experience',
+};

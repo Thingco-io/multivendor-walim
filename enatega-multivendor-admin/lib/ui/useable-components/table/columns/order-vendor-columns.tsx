@@ -44,5 +44,19 @@ export const ORDER_COLUMNS = () => {
       headerName: t('Delivery Address'),
       propertyName: 'OrderdeliveryAddress',
     },
+    {
+      // Delivery visibility: shows at a glance which orders are still waiting
+      // for a rider so the store can assign one.
+      headerName: t('Assigned Rider'),
+      propertyName: 'rider',
+      body: (rowData: IExtendedOrder) =>
+        rowData.rider ? (
+          <span className="dark:text-white">{rowData.rider.name}</span>
+        ) : (
+          <span className="rounded-full bg-amber-100 px-2 py-[2px] text-xs text-amber-700 dark:bg-amber-900/40 dark:text-amber-300">
+            {t('Unassigned')}
+          </span>
+        ),
+    },
   ];
 };

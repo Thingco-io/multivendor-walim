@@ -783,5 +783,7 @@ export const ru ={
     "Applied Filters": 'Примененные фильтры',
     "WhatsApp is not installed on the device": 'WhatsApp не установлен на устройстве',
     "Install it": 'Установите его',
-  }
+  howWasRider: 'How was your delivery?',
+  tellAboutDelivery: 'Tell us about your delivery experience',
+}
   

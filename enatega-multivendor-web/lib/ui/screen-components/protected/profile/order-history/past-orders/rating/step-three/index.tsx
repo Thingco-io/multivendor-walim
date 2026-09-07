@@ -19,6 +19,7 @@ const RenderStepThree: React.FC<IRenderStepThreeProps> = ({
   handleSubmitDebounced,
   comment,
   setComment,
+  aspects,
 }) => {
 
   const t = useTranslations();
@@ -27,6 +28,7 @@ const RenderStepThree: React.FC<IRenderStepThreeProps> = ({
       <RenderAspects
         selectedAspects={selectedAspects}
         handleAspectToggle={handleAspectToggle}
+        aspects={aspects}
       />
 
       <CustomButton

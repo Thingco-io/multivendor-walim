@@ -623,4 +623,6 @@ export const ps = {
   "Applied Filters": 'پلې شوي فلټرونه',
   "WhatsApp is not installed on the device": "واټساپ په وسیله نصب شوی نه دی",
   "Install it": "نصب یې کړئ",
+  howWasRider: 'How was your delivery?',
+  tellAboutDelivery: 'Tell us about your delivery experience',
 }

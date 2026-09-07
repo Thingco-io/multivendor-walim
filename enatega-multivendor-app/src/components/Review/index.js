@@ -22,17 +22,25 @@ const REVIEWORDER = gql`
   ${reviewOrder}
 `
 
-function Review({ onOverlayPress, theme, orderId, rating }, ref) {
+function Review({ onOverlayPress, theme, orderId, rating, onReviewSubmitted }, ref) {
 
   const { t } = useTranslation()
 
   const ratingRef = useRef()
   const [description, setDescription] = useState('')
   const [mutate] = useMutation(REVIEWORDER, { variables: { order: orderId, description, rating: ratingRef.current }, onCompleted, onError })
- 
+
+  // Closing the sheet without submitting — used by the X button.
+  function onClose() {
+    setDescription('')
+    ref?.current?.close()
+  }
+
   function onCompleted() {
     setDescription('')
     ref?.current?.close()
+    // The store review is done; the caller can now ask about the rider.
+    onReviewSubmitted && onReviewSubmitted()
   }
   function onError(error) {
     console.log(JSON.stringify(error))
@@ -75,7 +83,7 @@ function Review({ onOverlayPress, theme, orderId, rating }, ref) {
           <TextDefault bolder H3 textColor={theme.gray900}>
             {t('howWasOrder')}
           </TextDefault>
-          <TouchableOpacity onPress={onCompleted}>
+          <TouchableOpacity onPress={onClose}>
             <CrossCirleIcon stroke={theme.newIconColor}/>
           </TouchableOpacity>
         </View>

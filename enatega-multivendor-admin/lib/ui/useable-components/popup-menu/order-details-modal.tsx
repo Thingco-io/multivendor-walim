@@ -3,18 +3,28 @@ import { Dialog } from 'primereact/dialog';
 import { IExtendedOrder, Items } from '@/lib/utils/interfaces';
 import './order-detail-modal.css';
 import { useConfiguration } from '@/lib/hooks/useConfiguration';
+import CustomButton from '@/lib/ui/useable-components/button';
+import { useTranslations } from 'next-intl';
 
 interface IOrderDetailModalProps {
   visible: boolean;
   onHide: () => void;
   restaurantData: IExtendedOrder | null;
+  /**
+   * Supplied by the Vendor / Store Orders sections. When present, the modal
+   * shows the delivery section and offers manual rider assignment for orders
+   * no rider has taken yet.
+   */
+  onAssignRider?: (order: IExtendedOrder) => void;
 }
 
 const OrderDetailModal: React.FC<IOrderDetailModalProps> = ({
   visible,
   onHide,
   restaurantData,
+  onAssignRider,
 }) => {
+  const t = useTranslations();
   const { CURRENT_SYMBOL } = useConfiguration();
   const calculateSubtotal = (items: Items[]) => {
     let Subtotal = 0;
@@ -146,6 +156,41 @@ const OrderDetailModal: React.FC<IOrderDetailModalProps> = ({
           </h3>
           <p>{restaurantData.deliveryAddress.deliveryAddress}</p>
         </div>
+
+        {/* Delivery / rider section — only for the vendor and store dashboards,
+            where an unassigned order can be handed to an eligible rider. */}
+        {onAssignRider && (
+          <div className="order-section dark:bg-dark-600">
+            <h3 className="section-header dark:text-primary-dark">
+              {t('Delivery')}
+            </h3>
+            {restaurantData.rider ? (
+              <div className="charges-table">
+                <div className="charges-row">
+                  <span>{t('Assigned Rider')}</span>
+                  <span>{restaurantData.rider.name}</span>
+                </div>
+                {restaurantData.rider.phone && (
+                  <div className="charges-row">
+                    <span>{t('Phone')}</span>
+                    <span>{restaurantData.rider.phone}</span>
+                  </div>
+                )}
+              </div>
+            ) : (
+              <div className="flex flex-col gap-3">
+                <p className="text-sm text-gray-500 dark:text-gray-400">
+                  {t('No rider has taken this order yet')}
+                </p>
+                <CustomButton
+                  className="h-10 w-fit border border-gray-300 bg-black px-6 text-white dark:border-dark-600"
+                  label={t('Assign Rider')}
+                  onClick={() => onAssignRider(restaurantData)}
+                />
+              </div>
+            )}
+          </div>
+        )}
       </div>
     </Dialog>
   );

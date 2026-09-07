@@ -218,3 +218,35 @@ export const ABORT_ORDER = gql`
     }
   }
 `;
+
+// Feedback for the rider who delivered the order. Deliberately separate from
+// ADD_REVIEW_ORDER — the restaurant and the delivery are rated independently.
+export const ADD_REVIEW_RIDER = gql`
+  mutation ReviewRider(
+    $order: String!
+    $rating: Int!
+    $description: String
+    $comments: String
+  ) {
+    reviewRider(
+      riderReviewInput: {
+        order: $order
+        rating: $rating
+        description: $description
+        comments: $comments
+      }
+    ) {
+      _id
+      rating
+      description
+      comments
+      createdAt
+      rider {
+        _id
+        name
+        ratingAverage
+        ratingCount
+      }
+    }
+  }
+`;

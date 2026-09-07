@@ -13,5 +13,12 @@
   "ok": "OK",
   "loading_orders": "Bestellungen werden geladen...",
   "show_more_orders": "Weitere Bestellungen anzeigen",
-  "Our-brands": "Our brands"
+  "Our-brands": "Our brands",
+  "how_was_your_rider_title": "How was your rider?",
+  "rider_rating_modal_description": "Tell us how the delivery went — this goes to your rider, not the store",
+  "rider_label": "Rider",
+  "rider_rating_label": "Rider Rating",
+  "Rider_Politeness": "Rider politeness",
+  "Delivery_Speed": "Delivery speed",
+  "Order_Condition": "Order condition"
 }

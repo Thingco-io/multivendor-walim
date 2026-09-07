@@ -630,5 +630,6 @@ welcomeText: '欢迎来到Walim',
   "Applied Filters": "已应用筛选器",
   "WhatsApp is not installed on the device": "设备上未安装 WhatsApp",
   "Install it": "安装它",
-
+  howWasRider: 'How was your delivery?',
+  tellAboutDelivery: 'Tell us about your delivery experience',
 }

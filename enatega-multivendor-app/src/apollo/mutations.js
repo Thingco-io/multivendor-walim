@@ -284,6 +284,35 @@ export const reviewOrder = `mutation ReviewOrder(
     }
   }`
 
+
+// Rider feedback for a delivered order. Separate from `reviewOrder` so the
+// delivery is rated independently from the restaurant.
+export const reviewRider = `mutation ReviewRider(
+    $order:String!,
+    $rating:Int!,
+    $description:String,
+    $comments:String,
+  ){
+    reviewRider(riderReviewInput:{
+      order:$order,
+      rating:$rating,
+      description:$description,
+      comments:$comments,
+    }){
+      _id
+      rating
+      description
+      comments
+      createdAt
+      rider{
+        _id
+        name
+        ratingAverage
+        ratingCount
+      }
+    }
+  }`
+
 export const addFavouriteRestaurant = `mutation AddFavourite($id:String!){
     addFavourite(id:$id){
       _id

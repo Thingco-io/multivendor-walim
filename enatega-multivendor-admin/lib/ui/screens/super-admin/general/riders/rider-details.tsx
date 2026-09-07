@@ -17,6 +17,7 @@ import LicenseDetails from '@/lib/ui/screen-components/protected/super-admin/rid
 import PersonalDetails from '@/lib/ui/screen-components/protected/super-admin/riders/view/cards/personal-details';
 import VehicleDetails from '@/lib/ui/screen-components/protected/super-admin/riders/view/cards/vehicle-details';
 import HeaderText from '@/lib/ui/useable-components/header-text';
+import RiderRatingsList from '@/lib/ui/screen-components/protected/shared/rider-ratings';
 
 export default function RidersDetailScreen() {
   // Hooks
@@ -50,6 +51,12 @@ export default function RidersDetailScreen() {
         <LicenseDetails loading={loading} rider={rider} />
         {/* bottom-right */}
         <VehicleDetails loading={loading} rider={rider} />
+      </div>
+
+      {/* Delivery feedback customers left for this rider. */}
+      <div className="mt-8">
+        <HeaderText className="heading" text={t('Rider Ratings')} />
+        <RiderRatingsList riderId={id.toString()} />
       </div>
     </div>
   );

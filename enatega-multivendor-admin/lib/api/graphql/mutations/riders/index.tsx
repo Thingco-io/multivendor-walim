@@ -8,9 +8,14 @@ export const CREATE_RIDER = gql`
       username
       phone
       available
+      isActive
       vehicleType
       zone {
         _id
+      }
+      assignedStores {
+        _id
+        name
       }
     }
   }
@@ -23,9 +28,14 @@ export const EDIT_RIDER = gql`
       name
       username
       phone
+      isActive
       vehicleType
       zone {
         _id
+      }
+      assignedStores {
+        _id
+        name
       }
     }
   }
@@ -50,6 +60,38 @@ export const TOGGLE_RIDER = gql`
       vehicleType
       zone {
         title
+      }
+    }
+  }
+`;
+
+// Activate / deactivate a rider without deleting them — their history and
+// ratings are preserved, they simply stop receiving delivery opportunities.
+export const TOGGLE_RIDER_ACTIVE = gql`
+  mutation ToggleRiderActive($id: String!, $isActive: Boolean) {
+    toggleRiderActive(id: $id, isActive: $isActive) {
+      _id
+      name
+      isActive
+      available
+    }
+  }
+`;
+
+// Manual assignment from the Vendor / Store dashboard. The server only accepts
+// riders assigned to the store that received the order.
+export const ASSIGN_ORDER_TO_RIDER = gql`
+  mutation AssignOrderToRider($orderId: String!, $riderId: String!) {
+    assignOrderToRider(orderId: $orderId, riderId: $riderId) {
+      _id
+      orderId
+      orderStatus
+      assignedAt
+      rider {
+        _id
+        name
+        username
+        phone
       }
     }
   }

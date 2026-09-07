@@ -400,6 +400,11 @@ export const order = `query Order($id:String!){
     deliveredAt
     cancelledAt
     assignedAt
+    rider{
+      _id
+      name
+      phone
+    }
   }
 }
 `

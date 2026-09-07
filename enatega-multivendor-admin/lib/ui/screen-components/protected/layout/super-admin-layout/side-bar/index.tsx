@@ -103,6 +103,14 @@ export default function MakeSidebar() {
           isParent: false,
         },
         {
+          // Platform-wide rider feedback. Gated on the same 'Riders'
+          // permission, since it is rider data.
+          text: 'Riders',
+          label: t('Rider Ratings'),
+          route: '/general/rider-ratings',
+          isParent: false,
+        },
+        {
           text: 'Users',
           label: t('Users'),
           route: '/general/users',

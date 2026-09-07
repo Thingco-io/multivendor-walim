@@ -656,4 +656,6 @@ export const mr = {
     "Applied Filters": 'लागू केलेले फिल्टर्स',
     "WhatsApp is not installed on the device": "व्हॉट्सअॅप डिव्हाइसवर स्थापित नाही",
     "Install it": "स्थापित करा",
-  }
+  howWasRider: 'How was your delivery?',
+  tellAboutDelivery: 'Tell us about your delivery experience',
+}

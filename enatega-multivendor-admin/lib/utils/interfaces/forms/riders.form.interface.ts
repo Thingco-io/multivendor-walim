@@ -8,6 +8,8 @@ export interface IRiderForm {
   zone: IDropdownSelectItem | null;
   phone: number | null;
   vehicleType: IDropdownSelectItem | null;
+  // Vendor-managed riders: the stores this rider may serve.
+  assignedStores?: IDropdownSelectItem[];
 }
 
 export interface IRiderErrors {
@@ -18,4 +20,5 @@ export interface IRiderErrors {
   zone: string[];
   phone: string[];
   vehicleType: string[];
+  assignedStores?: string[];
 }

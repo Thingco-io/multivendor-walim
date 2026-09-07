@@ -84,10 +84,62 @@ export const RIDER_TABLE_COLUMNS = ({
       body: (rider: IRiderResponse) => rider.zone?.title ?? '-',
     },
     {
+      // Which vendor owns this rider — platform riders show as unbranded.
+      headerName: t('Vendor'),
+      propertyName: 'vendor',
+      body: (rider: IRiderResponse) =>
+        rider.vendor?.name || rider.vendor?.email || (
+          <span className="text-xs text-gray-400 dark:text-gray-500">
+            {t('Platform')}
+          </span>
+        ),
+    },
+    {
+      // Stores this rider serves — the field that decides which orders they
+      // are offered.
+      headerName: t('Assigned Stores'),
+      propertyName: 'assignedStores',
+      body: (rider: IRiderResponse) => {
+        const stores = rider.assignedStores ?? [];
+        if (!stores.length) {
+          return (
+            <span className="text-xs text-gray-400 dark:text-gray-500">-</span>
+          );
+        }
+        return (
+          <div className="flex max-w-[200px] flex-wrap gap-1">
+            {stores.map((store) => (
+              <span
+                key={store._id}
+                className="rounded-full border border-gray-300 px-2 py-[2px] text-xs dark:border-dark-600 dark:text-white"
+              >
+                {store.name}
+              </span>
+            ))}
+          </div>
+        );
+      },
+    },
+    {
+      headerName: t('Rating'),
+      propertyName: 'ratingAverage',
+      body: (rider: IRiderResponse) =>
+        rider.ratingCount ? (
+          <span className="whitespace-nowrap dark:text-white">
+            ★ {Number(rider.ratingAverage ?? 0).toFixed(2)}{' '}
+            <span className="text-xs text-gray-400">({rider.ratingCount})</span>
+          </span>
+        ) : (
+          <span className="text-xs text-gray-400 dark:text-gray-500">-</span>
+        ),
+    },
+    {
       headerName: t('Vehicle Type'),
       propertyName: 'vehicleType',
       body: (rider: IRiderResponse) =>
-        toTextCase(rider.vehicleType.replaceAll('_', ' '), 'title'),
+        rider.vehicleType
+          ? toTextCase(rider.vehicleType.replaceAll('_', ' '), 'title')
+          : '-',
     },
     {
       headerName: t('Available'),

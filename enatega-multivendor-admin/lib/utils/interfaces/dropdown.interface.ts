@@ -38,6 +38,9 @@ export interface IDropdownComponentProps extends ISelectionComponentProps {
   invalid?: boolean;
   filter?: boolean;
   loading?: boolean;
+  // Lets a filter dropdown be reset to "no selection".
+  showClear?: boolean;
+  disabled?: boolean;
   selectedItem: IDropdownSelectItem | null;
   setSelectedItem: (key: string, item: IDropdownSelectItem) => void;
   options: IDropdownSelectItem[];

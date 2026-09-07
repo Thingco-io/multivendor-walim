@@ -656,4 +656,6 @@ export const ro = {
     "Applied Filters": 'Filtre aplicate',
     "WhatsApp is not installed on the device": "WhatsApp nu este instalat pe dispozitiv",
     "Install it": "Instalați-l",
-  }
+  howWasRider: 'How was your delivery?',
+  tellAboutDelivery: 'Tell us about your delivery experience',
+}

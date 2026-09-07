@@ -621,5 +621,7 @@ export const fa = {
     "Applied Filters": 'فیلترهای اعمال شده',
     "WhatsApp is not installed on the device": 'واتس اپ روی دستگاه نصب نیست',
     "Install it": 'آن را نصب کنید',
-  }
+  howWasRider: 'How was your delivery?',
+  tellAboutDelivery: 'Tell us about your delivery experience',
+}
   

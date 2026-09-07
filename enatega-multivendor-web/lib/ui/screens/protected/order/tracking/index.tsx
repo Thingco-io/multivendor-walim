@@ -13,11 +13,16 @@ import useLocation from "@/lib/ui/screen-components/protected/order-tracking/ser
 import useTracking from "@/lib/ui/screen-components/protected/order-tracking/services/useTracking";
 import { useEffect, useMemo, useState } from "react";
 import { useMutation, useQuery } from "@apollo/client";
-import { ADD_REVIEW_ORDER, GET_USER_PROFILE } from "@/lib/api/graphql";
+import {
+  ADD_REVIEW_ORDER,
+  ADD_REVIEW_RIDER,
+  GET_USER_PROFILE,
+} from "@/lib/api/graphql";
 import useReviews from "@/lib/hooks/useReviews";
 import { IReview } from "@/lib/utils/interfaces";
 import useToast from "@/lib/hooks/useToast";
 import { RatingModal } from "@/lib/ui/screen-components/protected/profile";
+import RiderRatingModal from "@/lib/ui/screen-components/protected/profile/order-history/past-orders/rating/rider-main";
 import { onUseLocalStorage } from "@/lib/utils/methods/local-storage";
 import ReactConfetti from "react-confetti";
 import ChatRider from "@/lib/ui/screen-components/protected/order-tracking/components/ChatRider";
@@ -31,6 +36,9 @@ export default function OrderTrackingScreen({
 }: IOrderTrackingScreenProps) {
   //states
   const [showRatingModal, setShowRatingModal] = useState<boolean>(false);
+  // Second step of the feedback flow: rate the rider who delivered the order.
+  const [showRiderRatingModal, setShowRiderRatingModal] =
+    useState<boolean>(false);
   const [showConfetti, setShowConfetti] = useState(false);
   const [showChat, setShowChat] = useState(false)
 
@@ -65,6 +73,15 @@ export default function OrderTrackingScreen({
     onError,
   });
 
+  // Leaves the tracking page once the customer is done giving feedback.
+  function goToOrderHistory() {
+    // Add a small delay before navigation
+    // Use window.location for a hard redirect
+    setTimeout(() => {
+      window.location.href = "/profile/order-history";
+    }, 1000); // Increased timeout to ensure toast has time to display
+  }
+
   function onCompleted() {
     showToast({
       type: "success",
@@ -73,12 +90,14 @@ export default function OrderTrackingScreen({
       duration: 3000,
     });
 
+    // A delivery order also gets a separate rating for its rider; only leave
+    // the page once that step is done (or when there is no rider to rate).
+    if (mergedOrderDetails?.rider?._id) {
+      setShowRiderRatingModal(true);
+      return;
+    }
 
-    // Add a small delay before navigation
-    // Use window.location for a hard redirect
-    setTimeout(() => {
-      window.location.href = "/profile/order-history";
-    }, 1000); // Increased timeout to ensure toast has time to display
+    goToOrderHistory();
   }
 
   function onError() {
@@ -89,6 +108,27 @@ export default function OrderTrackingScreen({
       duration: 3000,
     });
   }
+
+  const [mutateRiderReview] = useMutation(ADD_REVIEW_RIDER, {
+    onCompleted: () => {
+      showToast({
+        type: "success",
+        title: "Rider Rating",
+        message: "Rating submitted successfully",
+        duration: 3000,
+      });
+      goToOrderHistory();
+    },
+    onError: () => {
+      showToast({
+        type: "error",
+        title: "Rider Rating",
+        message: "Failed to submit rating",
+        duration: 3000,
+      });
+      goToOrderHistory();
+    },
+  });
   // Merge subscription data with order tracking details
   let mergedOrderDetails =
     orderTrackingDetails && subscriptionData ?
@@ -182,8 +222,31 @@ export default function OrderTrackingScreen({
       console.error("Error submitting rating:", error);
     }
 
-    // Close the modal
+    // Close the modal. onCompleted decides whether the rider step follows.
     setShowRatingModal(false);
+  };
+
+  // handle submit rider rating
+  const handleSubmitRiderRating = async (
+    orderIdArg: string | undefined,
+    ratingValue: number,
+    comment?: string,
+    aspects: string[] = []
+  ) => {
+    try {
+      await mutateRiderReview({
+        variables: {
+          order: orderIdArg,
+          rating: ratingValue,
+          description: comment?.trim() || undefined,
+          comments: aspects?.filter(Boolean).join(", ") || undefined,
+        },
+      });
+    } catch (error) {
+      console.error("Error submitting rider rating:", error);
+    }
+
+    setShowRiderRatingModal(false);
   };
 
   //useEffects
@@ -254,6 +317,15 @@ export default function OrderTrackingScreen({
         onHide={() => setShowRatingModal(false)}
         order={orderTrackingDetails}
         onSubmitRating={handleSubmitRating}
+      />
+      <RiderRatingModal
+        visible={showRiderRatingModal}
+        onHide={() => {
+          setShowRiderRatingModal(false);
+          goToOrderHistory();
+        }}
+        order={mergedOrderDetails}
+        onSubmitRating={handleSubmitRiderRating}
       />
       <div className="w-screen h-full flex flex-col pb-20 dark:bg-gray-900 dark:text-gray-100">
         <div className="scrollable-container flex-1">
