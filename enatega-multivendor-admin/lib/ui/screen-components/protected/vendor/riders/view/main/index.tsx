@@ -113,6 +113,12 @@ export default function VendorRidersMain({
     setCurrentPage(1);
   }, [debouncedSearch, selectedStore?.code]);
 
+  // The roster also lists riders the super admin attached to one of this
+  // vendor's stores. Those belong to the platform (or another vendor), so they
+  // are visible and assignable but not editable from here.
+  const isOwnRider = (rider: IRiderResponse) =>
+    !!vendorId && rider.vendor?._id === vendorId;
+
   const menuItems: IActionMenuItem<IRiderResponse>[] = [
     {
       label: t('Ratings & Reviews'),
@@ -122,6 +128,7 @@ export default function VendorRidersMain({
     },
     {
       label: t('Edit'),
+      isVisible: isOwnRider,
       command: (rider?: IRiderResponse) => {
         if (rider) {
           setIsAddRiderVisible(true);
@@ -131,6 +138,7 @@ export default function VendorRidersMain({
     },
     {
       label: t('Delete'),
+      isVisible: isOwnRider,
       command: (rider?: IRiderResponse) => {
         if (rider) setDeleteId(rider._id);
       },
@@ -153,7 +161,7 @@ export default function VendorRidersMain({
         setSelectedData={setSelectedRiders}
         selectedData={selectedRiders}
         loading={loading}
-        columns={VENDOR_RIDER_TABLE_COLUMNS({ menuItems })}
+        columns={VENDOR_RIDER_TABLE_COLUMNS({ menuItems, vendorId })}
         totalRecords={data?.vendorRidersPaginated?.totalCount ?? 0}
         currentPage={data?.vendorRidersPaginated?.currentPage ?? currentPage}
         rowsPerPage={rowsPerPage}

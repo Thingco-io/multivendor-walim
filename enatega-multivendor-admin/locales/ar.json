@@ -1135,5 +1135,10 @@
   "Only riders assigned to this store can take this order": "Only riders assigned to this store can take this order",
   "No riders are assigned to this store yet": "No riders are assigned to this store yet",
   "No rider has taken this order yet": "No rider has taken this order yet",
-  "Assigned Rider": "Assigned Rider"
+  "Assigned Rider": "Assigned Rider",
+  "Managed By": "Managed By",
+  "You": "You",
+  "Active": "Active",
+  "Inactive": "Inactive",
+  "Platform (No Vendor)": "Platform (No Vendor)"
 }

@@ -36,14 +36,16 @@ const ActionMenu = <T,>({
   return (
     <div className="relative">
       <Menu
-        model={items?.map((item) => ({
-          label: item.label,
-          command: (e) => {
-            item.command?.(data);
-            menuRef.current?.hide(e.originalEvent);
-            onToggle();
-          },
-        }))}
+        model={items
+          ?.filter((item) => item.isVisible?.(data) ?? true)
+          .map((item) => ({
+            label: item.label,
+            command: (e) => {
+              item.command?.(data);
+              menuRef.current?.hide(e.originalEvent);
+              onToggle();
+            },
+          }))}
         popup
         ref={menuRef}
         id="popup_menu"

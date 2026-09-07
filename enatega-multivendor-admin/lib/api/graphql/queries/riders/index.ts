@@ -186,6 +186,13 @@ export const GET_VENDOR_RIDERS_PAGINATED = gql`
           _id
           title
         }
+        # Owner of the rider. A vendor also sees riders the super admin
+        # attached to one of its stores, and those stay read-only.
+        vendor {
+          _id
+          name
+          email
+        }
         assignedStores {
           _id
           name

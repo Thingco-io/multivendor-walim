@@ -1,20 +1,24 @@
 // Core
 import { Form, Formik, FormikHelpers } from 'formik';
+import { useMemo } from 'react';
 
 // Prime React
 import { Sidebar } from 'primereact/sidebar';
 
 // Interface and Types
-import { IQueryResult } from '@/lib/utils/interfaces';
+import { IDropdownSelectItem, IQueryResult } from '@/lib/utils/interfaces';
 import { IRiderForm } from '@/lib/utils/interfaces/forms';
 import {
   IRidersAddFormComponentProps,
   IRiderZonesResponse,
+  IRestaurantsByOwnerResponseGraphQL,
+  IVendorResponseGraphQL,
 } from '@/lib/utils/interfaces';
 
 // Components
 import CustomButton from '@/lib/ui/useable-components/button';
 import CustomDropdownComponent from '@/lib/ui/useable-components/custom-dropdown';
+import CustomMultiSelectComponent from '@/lib/ui/useable-components/custom-multi-select';
 import CustomTextField from '@/lib/ui/useable-components/input-field';
 import CustomPasswordTextField from '@/lib/ui/useable-components/password-input-field';
 
@@ -24,7 +28,7 @@ import {
   VEHICLE_TYPE,
 } from '@/lib/utils/constants';
 import { onErrorMessageMatcher } from '@/lib/utils/methods/error';
-import { RiderSchema } from '@/lib/utils/schema/rider';
+import { RiderEditSchema, RiderSchema } from '@/lib/utils/schema/rider';
 
 //Toast
 import useToast from '@/lib/hooks/useToast';
@@ -33,6 +37,8 @@ import useToast from '@/lib/hooks/useToast';
 import {
   CREATE_RIDER,
   EDIT_RIDER,
+  GET_RESTAURANTS_BY_OWNER,
+  GET_VENDORS,
   GET_ZONES,
 } from '@/lib/api/graphql';
 import { useQueryGQL } from '@/lib/hooks/useQueryQL';
@@ -40,12 +46,44 @@ import { useMutation } from '@apollo/client';
 import CustomPhoneTextField from '@/lib/ui/useable-components/phone-input-field';
 import { useTranslations } from 'next-intl';
 
+// A rider that is not handed to a vendor stays on the platform and keeps the
+// legacy zone-based dispatch.
+const PLATFORM_VENDOR_CODE = '';
+
 export default function RiderAddForm({
   onHide,
   rider,
   position = 'right',
   isAddRiderVisible,
 }: IRidersAddFormComponentProps) {
+  // Hooks
+  const t = useTranslations();
+  const { showToast } = useToast();
+
+  // Query
+  const { data } = useQueryGQL(
+    GET_ZONES,
+    {},
+    { fetchPolicy: 'cache-and-network' }
+  ) as IQueryResult<IRiderZonesResponse | undefined, undefined>;
+
+  const { data: vendorsData, loading: vendorsLoading } = useQueryGQL(
+    GET_VENDORS,
+    {},
+    { fetchPolicy: 'cache-and-network' }
+  ) as IQueryResult<IVendorResponseGraphQL | undefined, undefined>;
+
+  const vendorOptions: IDropdownSelectItem[] = useMemo(
+    () => [
+      { label: t('Platform (No Vendor)'), code: PLATFORM_VENDOR_CODE },
+      ...(vendorsData?.vendors ?? []).map((vendor) => ({
+        label: vendor.name || vendor.email,
+        code: vendor._id,
+      })),
+    ],
+    [vendorsData, t]
+  );
+
   const initialValues: IRiderForm = {
     name: '',
     username: '',
@@ -59,17 +97,18 @@ export default function RiderAddForm({
     zone: rider?.zone
       ? { label: rider.zone.title, code: rider.zone._id }
       : null,
+    vendor: rider?.vendor?._id
+      ? {
+          label: rider.vendor.name || rider.vendor.email || '',
+          code: rider.vendor._id,
+        }
+      : { label: t('Platform (No Vendor)'), code: PLATFORM_VENDOR_CODE },
+    assignedStores:
+      rider?.assignedStores?.map((store) => ({
+        label: store.name,
+        code: store._id,
+      })) ?? [],
   };
-
-
-  // Hooks
-  const t = useTranslations();
-  const { showToast } = useToast();
-
-  // Query
-  const { data } = useQueryGQL(GET_ZONES, {
-    fetchPolicy: 'cache-and-network',
-  }) as IQueryResult<IRiderZonesResponse | undefined, undefined>;
 
   // Mutation
   const mutation = rider ? EDIT_RIDER : CREATE_RIDER;
@@ -83,46 +122,52 @@ export default function RiderAddForm({
     values: IRiderForm,
     { resetForm }: FormikHelpers<IRiderForm>
   ) => {
-    if (data) {
-      mutate({
-        variables: {
-          riderInput: {
-            _id: rider ? rider._id : '',
-            name: values.name,
-            username: values.username,
-            phone: values.phone?.toString(),
-            zone: values.zone?.code,
-            vehicleType: values.vehicleType?.code,
-            available: rider ? rider.available : true,
-            ...(values.password ? { password: values.password } : {}),
-          },
+    const vendorId = values.vendor?.code || null;
+
+    mutate({
+      variables: {
+        riderInput: {
+          _id: rider ? rider._id : '',
+          name: values.name,
+          username: values.username,
+          phone: values.phone?.toString(),
+          zone: values.zone?.code || null,
+          vehicleType: values.vehicleType?.code,
+          available: rider ? rider.available : true,
+          vendor: vendorId,
+          // Store assignment only means something for a vendor's rider — a
+          // platform rider is dispatched by zone.
+          assignedStores: vendorId
+            ? (values.assignedStores ?? []).map((store) => store.code)
+            : [],
+          ...(values.password ? { password: values.password } : {}),
         },
-        onCompleted: () => {
-          showToast({
-            type: 'success',
-            title: t('Success'),
-            message: rider ? t('Rider updated') : t('Rider added'),
-            duration: 3000,
-          });
-          resetForm();
-          onHide();
-        },
-        onError: (error) => {
-          let message = '';
-          try {
-            message = error.graphQLErrors[0]?.message;
-          } catch (err) {
-            message = t('ActionFailedTryAgain');
-          }
-          showToast({
-            type: 'error',
-            title: t('Error'),
-            message,
-            duration: 3000,
-          });
-        },
-      });
-    }
+      },
+      onCompleted: () => {
+        showToast({
+          type: 'success',
+          title: t('Success'),
+          message: rider ? t('Rider updated') : t('Rider added'),
+          duration: 3000,
+        });
+        resetForm();
+        onHide();
+      },
+      onError: (error) => {
+        let message = '';
+        try {
+          message = error.graphQLErrors[0]?.message;
+        } catch (err) {
+          message = t('ActionFailedTryAgain');
+        }
+        showToast({
+          type: 'error',
+          title: t('Error'),
+          message,
+          duration: 3000,
+        });
+      },
+    });
   };
 
   return (
@@ -144,7 +189,7 @@ export default function RiderAddForm({
             <div>
               <Formik
                 initialValues={initialValues}
-                validationSchema={RiderSchema}
+                validationSchema={rider ? RiderEditSchema : RiderSchema}
                 onSubmit={handleSubmit}
                 enableReinitialize
                 validateOnChange={false} // Disable validation on change
@@ -255,6 +300,36 @@ export default function RiderAddForm({
                           }}
                         />
 
+                        {/* Handing the rider to a vendor switches dispatch from
+                            zone-wide to the vendor's selected stores. */}
+                        <CustomDropdownComponent
+                          placeholder={t('Vendor')}
+                          options={vendorOptions}
+                          showLabel={true}
+                          isLoading={vendorsLoading && !vendorsData}
+                          name="vendor"
+                          selectedItem={values.vendor ?? null}
+                          setSelectedItem={(
+                            name: string,
+                            value: IDropdownSelectItem
+                          ) => {
+                            setFieldValue(name, value);
+                            // Stores belong to a single vendor, so a change of
+                            // vendor invalidates whatever was selected.
+                            setFieldValue('assignedStores', []);
+                          }}
+                          style={{
+                            borderColor: errors?.vendor ? 'red' : '',
+                          }}
+                        />
+
+                        <VendorStoresField
+                          vendorId={values.vendor?.code || ''}
+                          selectedStores={values.assignedStores ?? []}
+                          setFieldValue={setFieldValue}
+                          hasError={!!errors?.assignedStores}
+                        />
+
                         <CustomDropdownComponent
                           placeholder={t('Zone')}
                           options={
@@ -318,5 +393,56 @@ export default function RiderAddForm({
         </div>
       </div>
     </Sidebar>
+  );
+}
+
+/**
+ * Store picker for the vendor selected above.
+ *
+ * Split into its own component so the stores query re-runs on the selected
+ * vendor without the whole form re-rendering against a stale owner id. Renders
+ * nothing for a platform rider, which has no vendor and therefore no stores.
+ */
+function VendorStoresField({
+  vendorId,
+  selectedStores,
+  setFieldValue,
+  hasError,
+}: {
+  vendorId: string;
+  selectedStores: IDropdownSelectItem[];
+  setFieldValue: (field: string, value: unknown) => void;
+  hasError: boolean;
+}) {
+  const t = useTranslations();
+
+  const { data, loading } = useQueryGQL(
+    GET_RESTAURANTS_BY_OWNER,
+    { id: vendorId },
+    { enabled: !!vendorId, fetchPolicy: 'cache-and-network' }
+  ) as IQueryResult<IRestaurantsByOwnerResponseGraphQL | undefined, undefined>;
+
+  const storeOptions: IDropdownSelectItem[] = useMemo(
+    () =>
+      (data?.restaurantByOwner?.restaurants ?? []).map((store) => ({
+        label: store.name,
+        code: store._id,
+      })),
+    [data]
+  );
+
+  if (!vendorId) return null;
+
+  return (
+    <CustomMultiSelectComponent
+      name="assignedStores"
+      placeholder={t('Assigned Stores')}
+      showLabel={true}
+      isLoading={loading && !data}
+      options={storeOptions}
+      selectedItems={selectedStores}
+      setSelectedItems={setFieldValue}
+      style={{ borderColor: hasError ? 'red' : '' }}
+    />
   );
 }
