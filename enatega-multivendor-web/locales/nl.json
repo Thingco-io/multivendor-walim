@@ -919,5 +919,12 @@
   "show_more_orders": "Meer bestellingen tonen",
   "your_email": "uw@email.com",
   "Select_your_address_prompt": "Selecteer uw adres.",
-  "Our-brands": "Onze merken"
+  "Our-brands": "Onze merken",
+  "how_was_your_rider_title": "How was your rider?",
+  "rider_rating_modal_description": "Tell us how the delivery went — this goes to your rider, not the store",
+  "rider_label": "Rider",
+  "rider_rating_label": "Rider Rating",
+  "Rider_Politeness": "Rider politeness",
+  "Delivery_Speed": "Delivery speed",
+  "Order_Condition": "Order condition"
 }

@@ -1,10 +1,14 @@
-import React, { useContext, useEffect, useMemo, useState } from 'react';
+import React, { useContext, useEffect, useMemo, useRef, useState } from 'react';
+import { useSubscription } from '@apollo/client';
 import Table from '@/lib/ui/useable-components/table';
 import { useQueryGQL } from '@/lib/hooks/useQueryQL';
 import OrderTableHeader from '../header/table-header';
 import { IQueryResult } from '@/lib/utils/interfaces';
 import { RestaurantLayoutContext } from '@/lib/context/restaurant/layout-restaurant.context';
-import { GET_ORDER_BY_RESTAURANT } from '@/lib/api/graphql';
+import {
+  GET_ORDER_BY_RESTAURANT,
+  SUBSCRIPTION_PLACE_ORDER,
+} from '@/lib/api/graphql';
 import { ORDER_COLUMNS } from '@/lib/ui/useable-components/table/columns/order-vendor-columns';
 import OrderTableSkeleton from '@/lib/ui/useable-components/custom-skeletons/orders.vendor.row.skeleton';
 import {
@@ -14,6 +18,7 @@ import { IOrdersByRestaurantPaginatedResponse } from '@/lib/utils/interfaces/ord
 import { TOrderRowData } from '@/lib/utils/types';
 import { DataTableRowClickEvent } from 'primereact/datatable';
 import OrderDetailModal from '@/lib/ui/useable-components/popup-menu/order-details-modal';
+import AssignRiderDialog from '@/lib/ui/useable-components/assign-rider-dialog';
 import { useTranslations } from 'next-intl';
 import useDebounce from '@/lib/hooks/useDebounce';
 
@@ -32,9 +37,11 @@ export default function OrderVendorMain() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedRestaurant, setSelectedRestaurant] =
     useState<IExtendedOrder | null>(null);
+  // Order whose delivery the store is handing to a rider manually.
+  const [assignOrder, setAssignOrder] = useState<IExtendedOrder | null>(null);
   const debouncedSearch = useDebounce(searchTerm, 500);
 
-  const { data, error, loading } = useQueryGQL(
+  const { data, error, loading, refetch } = useQueryGQL(
     GET_ORDER_BY_RESTAURANT,
     {
       restaurant: restaurantId,
@@ -48,6 +55,36 @@ export default function OrderVendorMain() {
       enabled: !!restaurantId,
     }
   ) as IQueryResult<IOrdersByRestaurantPaginatedResponse | undefined, undefined>;
+
+  // The PLACE_ORDER channel carries every order event for this restaurant
+  // (new placements, status changes, rider assignment, etc. all publish to
+  // it via publishToDashboard), not just brand new orders - so this must
+  // check `origin` and only refetch on "new", or the table refetches (and
+  // flashes back to its loading skeleton) on every unrelated status update
+  // too, which looks like it's reloading nonstop.
+  const { data: newOrderData } = useSubscription(SUBSCRIPTION_PLACE_ORDER, {
+    variables: { restaurant: restaurantId },
+    skip: !restaurantId,
+  });
+
+  const refetchTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  useEffect(() => {
+    if (newOrderData?.subscribePlaceOrder?.origin !== 'new') return;
+
+    if (refetchTimeoutRef.current) {
+      clearTimeout(refetchTimeoutRef.current);
+    }
+    refetchTimeoutRef.current = setTimeout(() => {
+      refetch?.();
+    }, 500);
+
+    return () => {
+      if (refetchTimeoutRef.current) {
+        clearTimeout(refetchTimeoutRef.current);
+      }
+    };
+  }, [newOrderData, refetch]);
 
   const handleSearch = (newSearchTerm: string) => {
     setSearchTerm(newSearchTerm);
@@ -103,7 +140,7 @@ export default function OrderVendorMain() {
         data={displayData as IExtendedOrder[]}
         setSelectedData={setSelectedData}
         selectedData={selectedData}
-        columns={ORDER_COLUMNS()}
+        columns={ORDER_COLUMNS(restaurantId ?? '', () => refetch?.())}
         loading={loading}
         handleRowClick={handleRowClick}
         moduleName="Restaurant-Order"
@@ -119,6 +156,19 @@ export default function OrderVendorMain() {
         visible={isModalOpen}
         onHide={() => setIsModalOpen(false)}
         restaurantData={selectedRestaurant}
+        onAssignRider={(order) => {
+          setIsModalOpen(false);
+          setAssignOrder(order);
+        }}
+      />
+      <AssignRiderDialog
+        visible={!!assignOrder}
+        onHide={() => setAssignOrder(null)}
+        orderId={assignOrder?._id ?? null}
+        orderNumber={assignOrder?.orderId ?? null}
+        storeId={restaurantId ?? null}
+        assignedRiderName={assignOrder?.rider?.name ?? null}
+        onAssigned={() => refetch?.()}
       />
       {error && (
         <p className="text-red-500">

@@ -573,7 +573,7 @@ export default function RestaurantDetailsForm({
                               ? 'red'
                               : '',
                           }}
-                          fileTypes={['image/webp', 'image/jpg', 'image/jpeg']}
+                          fileTypes={['image/webp','image/jpg','image/png','image/jpeg','image/gif']}
                           maxFileHeight={1080}
                           maxFileWidth={1080}
                           maxFileSize={MAX_SQUARE_FILE_SIZE}
@@ -597,7 +597,7 @@ export default function RestaurantDetailsForm({
                           }}
                           existingImageUrl={values.image}
                           showExistingImage={true}
-                          fileTypes={['image/webp', 'image/jpg', 'image/jpeg']}
+                          fileTypes={['image/webp','image/jpg','image/png','image/jpeg','image/gif']}
                           maxFileHeight={841}
                           maxFileWidth={1980}
                           maxFileSize={MAX_LANSDCAPE_FILE_SIZE}

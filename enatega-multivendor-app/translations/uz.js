@@ -656,4 +656,6 @@ export const uz = {
     "Applied Filters": 'Qo‘llanilgan Filtrlar',
     "WhatsApp is not installed on the device": "WhatsApp qurilmada o‘rnatilmagan",
     "Install it": "Uni o‘rnating",
-  }
+  howWasRider: 'How was your delivery?',
+  tellAboutDelivery: 'Tell us about your delivery experience',
+}

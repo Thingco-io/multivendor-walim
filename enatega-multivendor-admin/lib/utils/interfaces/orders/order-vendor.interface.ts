@@ -42,6 +42,15 @@ export interface IOrder extends IGlobalComponentProps {
   orderStatus: string;
 }
 
+// Rider currently responsible for delivering an order, when one has taken it.
+export interface IOrderRider {
+  _id: string;
+  name: string;
+  username?: string;
+  phone?: string;
+  available?: boolean;
+}
+
 // Create a new interface that extends IOrder with the additional properties
 export interface IExtendedOrder extends IOrder {
   paidAmount?: number;
@@ -54,6 +63,22 @@ export interface IExtendedOrder extends IOrder {
   OrderdeliveryAddress?: string;
   DateCreated?: string;
   restaurant?: IRestaurant;
+  user?: { _id: string; name?: string; phone?: string; email?: string };
+  rider?: IOrderRider | null;
+  assignedAt?: string | null;
+  deliveredAt?: string | null;
+  isPickedUp?: boolean;
+}
+
+export interface IVendorOrdersPaginatedResponse {
+  vendorOrdersPaginated: {
+    orders: IExtendedOrder[];
+    totalCount: number;
+    totalPages: number;
+    currentPage: number;
+    nextPage: number | null;
+    prevPage: number | null;
+  };
 }
 
 export interface IOrdersData extends IGlobalComponentProps {

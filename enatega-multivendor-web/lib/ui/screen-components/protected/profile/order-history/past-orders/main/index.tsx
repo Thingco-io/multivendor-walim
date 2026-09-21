@@ -6,6 +6,7 @@ import OrderCardSkeleton from "@/lib/ui/useable-components/custom-skeletons/orde
 import OrderCard from "@/lib/ui/useable-components/order-card";
 import EmptyState from "@/lib/ui/useable-components/orders-empty-state";
 import RatingModal from "../rating/main";
+import RiderRatingModal from "../rating/rider-main";
 import TextComponent from "@/lib/ui/useable-components/text-field";
 // Interfaces
 import {
@@ -16,7 +17,7 @@ import {
 import useToast from "@/lib/hooks/useToast";
 // Querys and Mutations
 import { useMutation } from "@apollo/client";
-import { ADD_REVIEW_ORDER } from "@/lib/api/graphql/mutations";
+import { ADD_REVIEW_ORDER, ADD_REVIEW_RIDER } from "@/lib/api/graphql/mutations";
 // Methods
 import useDebounceFunction from "@/lib/hooks/useDebounceForFunction";
 import { useTranslations } from "next-intl";
@@ -29,6 +30,9 @@ export default function PastOrders({
   // states
   const t = useTranslations()
   const [showRatingModal, setShowRatingModal] = useState<boolean>(false);
+  // Second step of the feedback flow: rate the rider who delivered the order.
+  const [showRiderRatingModal, setShowRiderRatingModal] =
+    useState<boolean>(false);
   const [selectedOrder, setSelectedOrder] = useState<IOrder | null>(null);
 
   // hooks
@@ -51,7 +55,14 @@ export default function PastOrders({
       message: t('rating_submitted_successfully_message'),
       duration: 3000,
     });
-    setSelectedOrder(null);
+
+    // Delivery orders get a second, separate rating for the rider. Pickup
+    // orders and orders no rider handled skip straight to the end.
+    if (selectedOrder?.rider?._id) {
+      setShowRiderRatingModal(true);
+    } else {
+      setSelectedOrder(null);
+    }
   }
   function onError() {
     showToast({
@@ -62,6 +73,31 @@ export default function PastOrders({
     });
     setSelectedOrder(null);
   }
+
+  // Rider review mutation — stored against the rider, not the restaurant.
+  const [mutateRiderReview, { loading: isLoadingReviewRider }] = useMutation(
+    ADD_REVIEW_RIDER,
+    {
+      onCompleted: () => {
+        showToast({
+          type: "success",
+          title: t("rider_rating_label"),
+          message: t("rating_submitted_successfully_message"),
+          duration: 3000,
+        });
+        setSelectedOrder(null);
+      },
+      onError: () => {
+        showToast({
+          type: "error",
+          title: t("rider_rating_label"),
+          message: t("failed_to_submit_rating_message"),
+          duration: 3000,
+        });
+        setSelectedOrder(null);
+      },
+    }
+  );
 
   // const slug =pastOrders[0]?.restaurant?.slug;
 
@@ -115,9 +151,32 @@ export default function PastOrders({
       console.error("Error submitting rating:", error);
     }
 
-    // Close the modal
+    // Close the store rating modal. onCompleted decides whether the rider
+    // rating step follows.
     setShowRatingModal(false);
-    setSelectedOrder(null);
+  };
+
+  // handle submit rider rating
+  const handleSubmitRiderRating = async (
+    orderId: string | undefined,
+    ratingValue: number,
+    comment?: string,
+    aspects: string[] = []
+  ) => {
+    try {
+      await mutateRiderReview({
+        variables: {
+          order: orderId,
+          rating: ratingValue,
+          description: comment?.trim() || undefined,
+          comments: aspects?.filter(Boolean).join(", ") || undefined,
+        },
+      });
+    } catch (error) {
+      console.error("Error submitting rider rating:", error);
+    }
+
+    setShowRiderRatingModal(false);
   };
 
   // If ordersLoading display skelton  component of orderCardSkelton
@@ -166,6 +225,19 @@ export default function PastOrders({
           onHide={() => setShowRatingModal(false)}
           order={selectedOrder}
           onSubmitRating={handleSubmitRating}
+        />
+      )}
+
+      {/* Rider Rating Modal — shown after the store rating for delivery orders */}
+      {!isLoadingReviewRider && (
+        <RiderRatingModal
+          visible={showRiderRatingModal}
+          onHide={() => {
+            setShowRiderRatingModal(false);
+            setSelectedOrder(null);
+          }}
+          order={selectedOrder}
+          onSubmitRating={handleSubmitRiderRating}
         />
       )}
     </>

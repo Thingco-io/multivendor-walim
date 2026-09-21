@@ -64,6 +64,11 @@ export const PAYMENT_METHOD_LIST = [
     value: "STRIPE",
     icon: faCreditCard,
   },
+  {
+    label: "card_moyasar",
+    value: "MOYASAR",
+    icon: faCreditCard,
+  },
 ];
 
 export const USER_CURRENT_LOCATION_LS_KEY = "user-current-location";

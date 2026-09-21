@@ -665,5 +665,6 @@ loginRequired: 'Anmeldung erforderlich',
   "Applied Filters": "Angewendete Filter",
   "WhatsApp is not installed on the device": "WhatsApp ist auf dem Gerät nicht installiert",
   "Install it": "Installiere es",
-
+  howWasRider: 'How was your delivery?',
+  tellAboutDelivery: 'Tell us about your delivery experience',
 }

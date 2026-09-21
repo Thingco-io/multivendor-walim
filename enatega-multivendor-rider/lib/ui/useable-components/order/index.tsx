@@ -102,6 +102,11 @@ const Order = ({
         ? `${etaMinutes} mins`
         : null;
 
+  // acceptedAt is intentionally not required here: it only feeds the optional
+  // accept-countdown timer in useOrder (which already handles it being
+  // missing), so a card must still render without it rather than silently
+  // disappearing - with no visible order and no empty-state fallback - for
+  // any order whose acceptedAt wasn't populated on the backend.
   if (
     !orderId ||
     !_id ||
@@ -110,8 +115,7 @@ const Order = ({
     !deliveryAddress ||
     !paymentMethod ||
     !orderAmount ||
-    !paymentStatus ||
-    !acceptedAt
+    !paymentStatus
   ) {
     return null;
   } else
@@ -135,8 +139,7 @@ const Order = ({
           !!deliveryAddress &&
           !!paymentMethod &&
           !!orderAmount &&
-          !!paymentStatus &&
-          !!acceptedAt && (
+          !!paymentStatus && (
             <TouchableOpacity
               activeOpacity={0.8}
               onPress={() => {

@@ -112,7 +112,7 @@ export const SUBSCRIPTION_NEW_MESSAGE = gql`
 `;
 
 export const SUBSCRIPTION_ZONE_ORDERS = gql`
-  subscription SubscriptionZoneOrders($zoneId: String!) {
+  subscription SubscriptionZoneOrders($zoneId: String) {
     subscriptionZoneOrders(zoneId: $zoneId) {
       zoneId
       origin

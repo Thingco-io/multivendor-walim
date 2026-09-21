@@ -109,6 +109,7 @@ export const RiderErrors: IRiderErrors = {
   zone: ['Required'],
   phone: ['Required', 'Minimum 5 Numbers are Required'],
   vehicleType: ['Required'],
+  assignedStores: ['Assign at least one store'],
 };
 
 export const BannersErrors: IBannersErrors = {

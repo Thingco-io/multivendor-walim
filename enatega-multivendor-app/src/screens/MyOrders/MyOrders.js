@@ -16,12 +16,15 @@ import OrdersContext from '../../context/Orders'
 import { HeaderBackButton } from '@react-navigation/elements'
 import { useTranslation } from 'react-i18next'
 import ReviewModal from '../../components/Review'
+import RiderReviewModal from '../../components/RiderReview'
 
 import useNetworkStatus from '../../utils/useNetworkStatus'
 import ErrorView from '../../components/ErrorView/ErrorView'
 
 function MyOrders(props) {
   const reviewModalRef = useRef()
+  // Second step of the feedback flow: rate the rider who delivered the order.
+  const riderReviewModalRef = useRef()
   const [reviewInfo, setReviewInfo] = useState()
   const analytics = Analytics()
   const { t, i18n } = useTranslation()
@@ -35,6 +38,19 @@ function MyOrders(props) {
   }
   const closeReviewModal = () => {
     reviewModalRef.current.close()
+  }
+  const closeRiderReviewModal = () => {
+    riderReviewModalRef.current.close()
+  }
+
+  // Once the store review is in, ask about the rider — but only for orders a
+  // rider actually delivered.
+  const onStoreReviewSubmitted = () => {
+    if (!reviewInfo?.order?.rider?._id) {
+      setReviewInfo(undefined)
+      return
+    }
+    riderReviewModalRef.current.open()
   }
 
   useEffect(() => {
@@ -128,7 +144,8 @@ function MyOrders(props) {
           }}
         />
       </View>
-      <ReviewModal ref={reviewModalRef} onOverlayPress={closeReviewModal} theme={currentTheme} orderId={reviewInfo?.order._id} rating={reviewInfo?.selectedRating} />
+      <ReviewModal ref={reviewModalRef} onOverlayPress={closeReviewModal} theme={currentTheme} orderId={reviewInfo?.order._id} rating={reviewInfo?.selectedRating} onReviewSubmitted={onStoreReviewSubmitted} />
+      <RiderReviewModal ref={riderReviewModalRef} onOverlayPress={closeRiderReviewModal} theme={currentTheme} orderId={reviewInfo?.order._id} riderName={reviewInfo?.order?.rider?.name} onSubmitted={() => setReviewInfo(undefined)} />
     </>
   )
 }

@@ -564,7 +564,7 @@ export default function RestaurantDetails({
                           key="logo"
                           name="logo"
                           title={t('Upload Profile Image')}
-                          fileTypes={['image/jpg', 'image/webp', 'image/jpeg']}
+                          fileTypes={['image/webp','image/jpg','image/png','image/jpeg','image/gif']}
                           maxFileHeight={1080}
                           maxFileWidth={1080}
                           maxFileSize={MAX_SQUARE_FILE_SIZE}
@@ -586,7 +586,7 @@ export default function RestaurantDetails({
                           key={'image'}
                           name="image"
                           title={t('Upload Image')}
-                          fileTypes={['image/jpg', 'image/webp', 'image/jpeg']}
+                          fileTypes={['image/webp','image/jpg','image/png','image/jpeg','image/gif']}
                           maxFileHeight={841}
                           maxFileWidth={1980}
                           maxFileSize={MAX_LANSDCAPE_FILE_SIZE}

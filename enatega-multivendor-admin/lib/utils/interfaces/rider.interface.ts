@@ -8,6 +8,24 @@ export interface IRiderResponseZone {
   title: string;
 }
 
+// Store a rider is assigned to. A rider only ever receives delivery
+// opportunities from the stores listed here.
+export interface IRiderStore {
+  __typename?: 'RiderStore';
+  _id: string;
+  name: string;
+  image?: string;
+  address?: string;
+  slug?: string;
+}
+
+export interface IRiderVendor {
+  __typename?: 'RiderVendor';
+  _id: string;
+  name?: string;
+  email?: string;
+}
+
 export interface IRiderResponse {
   __typename: 'Rider';
   _id: string;
@@ -15,9 +33,14 @@ export interface IRiderResponse {
   username: string;
   phone: string;
   available: boolean;
+  isActive?: boolean;
   vehicleType: string;
   assigned: string[];
   zone: IRiderResponseZone | null;
+  vendor?: IRiderVendor | null;
+  assignedStores?: IRiderStore[];
+  ratingAverage?: number;
+  ratingCount?: number;
 }
 
 export interface ISingleRiderResponse {
@@ -28,8 +51,13 @@ export interface ISingleRiderResponse {
   username: string;
   phone: string;
   available: boolean;
+  isActive?: boolean;
   assigned: string[];
   zone: IRiderResponseZone | null;
+  vendor?: IRiderVendor | null;
+  assignedStores?: IRiderStore[];
+  ratingAverage?: number;
+  ratingCount?: number;
   bussinessDetails: IBusinessDetails;
   licenseDetails: ILicenseDetails;
   vehicleDetails: IVehicleDetails;
@@ -118,4 +146,56 @@ export interface IRidersResponseGraphQL {
 export interface IRiderDetailsProps {
   loading: boolean;
   rider: ISingleRiderResponse | undefined;
+}
+
+
+export interface IVendorRidersPaginatedResponse {
+  vendorRidersPaginated: {
+    data: IRiderResponse[];
+    totalCount: number;
+    currentPage: number;
+    totalPages: number;
+  };
+}
+
+export interface IRidersByStoreResponse {
+  ridersByStore: IRiderResponse[];
+}
+
+// Customer feedback for a delivery rider — kept separate from the
+// restaurant/order review so rider performance is tracked on its own.
+export interface IRiderReview {
+  __typename?: 'RiderReview';
+  _id: string;
+  rating: number;
+  description?: string | null;
+  comments?: string | null;
+  createdAt: string;
+  rider: {
+    _id: string;
+    name: string;
+    username?: string;
+    ratingAverage?: number;
+    ratingCount?: number;
+  } | null;
+  restaurant: { _id: string; name: string; image?: string | null } | null;
+  order: { _id: string; orderId: string; deliveredAt?: string | null } | null;
+}
+
+export interface IRiderReviewsPaginatedResponse {
+  riderReviewsPaginated: {
+    data: IRiderReview[];
+    totalCount: number;
+    currentPage: number;
+    totalPages: number;
+  };
+}
+
+export interface IRiderRatingSummaryResponse {
+  riderRatingSummary: {
+    riderId: string;
+    total: number;
+    average: number;
+    breakdown: { stars: number; count: number }[];
+  };
 }

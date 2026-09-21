@@ -919,5 +919,12 @@
   "show_more_orders": "વધુ ઓર્ડર્સ જુઓ",
   "your_email": "તમારું@ઈમેઇલ.કોમ",
   "Select_your_address_prompt": "તમારું સરનામું પસંદ કરો.",
-  "Our-brands": "અમારા બ્રાન્ડ્સ"
+  "Our-brands": "અમારા બ્રાન્ડ્સ",
+  "how_was_your_rider_title": "How was your rider?",
+  "rider_rating_modal_description": "Tell us how the delivery went — this goes to your rider, not the store",
+  "rider_label": "Rider",
+  "rider_rating_label": "Rider Rating",
+  "Rider_Politeness": "Rider politeness",
+  "Delivery_Speed": "Delivery speed",
+  "Order_Condition": "Order condition"
 }

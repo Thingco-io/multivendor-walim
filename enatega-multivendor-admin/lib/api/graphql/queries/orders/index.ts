@@ -142,14 +142,18 @@ export const GET_ORDER_BY_RESTAURANT = gql`
         paymentStatus
         reason
         isActive
+        isPickedUp
         createdAt
         deliveryCharges
         tipping
         taxationAmount
+        assignedAt
+        deliveredAt
         rider {
           _id
           name
           username
+          phone
           available
         }
       }
@@ -496,3 +500,91 @@ export const GET_ORDERS_WITHOUT_PAGINATION = gql`
 
 
 
+
+// Orders across every store a vendor operates — the Vendor Dashboard's Orders
+// section. Store dashboards keep using GET_ORDER_BY_RESTAURANT.
+export const GET_VENDOR_ORDERS = gql`
+  query VendorOrdersPaginated(
+    $page: Int
+    $limit: Int
+    $search: String
+    $vendorId: String
+    $restaurantId: String
+    $orderStatus: [String]
+    $riderAssigned: Boolean
+  ) {
+    vendorOrdersPaginated(
+      page: $page
+      limit: $limit
+      search: $search
+      vendorId: $vendorId
+      restaurantId: $restaurantId
+      orderStatus: $orderStatus
+      riderAssigned: $riderAssigned
+    ) {
+      totalCount
+      totalPages
+      currentPage
+      prevPage
+      nextPage
+      orders {
+        _id
+        orderId
+        restaurant {
+          _id
+          name
+          image
+          address
+        }
+        deliveryAddress {
+          deliveryAddress
+          details
+          label
+        }
+        items {
+          _id
+          title
+          quantity
+          variation {
+            _id
+            title
+            price
+          }
+          addons {
+            _id
+            options {
+              _id
+              title
+              price
+            }
+          }
+        }
+        user {
+          _id
+          name
+          phone
+          email
+        }
+        paymentMethod
+        paidAmount
+        orderAmount
+        orderStatus
+        paymentStatus
+        isActive
+        createdAt
+        deliveryCharges
+        tipping
+        taxationAmount
+        assignedAt
+        deliveredAt
+        rider {
+          _id
+          name
+          username
+          phone
+          available
+        }
+      }
+    }
+  }
+`;

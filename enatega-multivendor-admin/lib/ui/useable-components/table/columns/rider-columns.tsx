@@ -4,6 +4,7 @@ import { useContext, useState } from 'react';
 // Custom Components
 import ActionMenu from '@/lib/ui/useable-components/action-menu';
 import CustomInputSwitch from '../../custom-input-switch';
+import AssignedStoresStack from '../../assigned-stores-stack';
 
 // Interfaces and Types
 import { IActionMenuProps } from '@/lib/utils/interfaces/action-menu.interface';
@@ -84,10 +85,45 @@ export const RIDER_TABLE_COLUMNS = ({
       body: (rider: IRiderResponse) => rider.zone?.title ?? '-',
     },
     {
+      // Which vendor owns this rider — platform riders show as unbranded.
+      headerName: t('Vendor'),
+      propertyName: 'vendor',
+      body: (rider: IRiderResponse) =>
+        rider.vendor?.name || rider.vendor?.email || (
+          <span className="text-xs text-gray-400 dark:text-gray-500">
+            {t('Platform')}
+          </span>
+        ),
+    },
+    {
+      // Stores this rider serves — the field that decides which orders they
+      // are offered.
+      headerName: t('Assigned Stores'),
+      propertyName: 'assignedStores',
+      body: (rider: IRiderResponse) => (
+        <AssignedStoresStack stores={rider.assignedStores} />
+      ),
+    },
+    {
+      headerName: t('Rating'),
+      propertyName: 'ratingAverage',
+      body: (rider: IRiderResponse) =>
+        rider.ratingCount ? (
+          <span className="whitespace-nowrap dark:text-white">
+            ★ {Number(rider.ratingAverage ?? 0).toFixed(2)}{' '}
+            <span className="text-xs text-gray-400">({rider.ratingCount})</span>
+          </span>
+        ) : (
+          <span className="text-xs text-gray-400 dark:text-gray-500">-</span>
+        ),
+    },
+    {
       headerName: t('Vehicle Type'),
       propertyName: 'vehicleType',
       body: (rider: IRiderResponse) =>
-        toTextCase(rider.vehicleType.replaceAll('_', ' '), 'title'),
+        rider.vehicleType
+          ? toTextCase(rider.vehicleType.replaceAll('_', ' '), 'title')
+          : '-',
     },
     {
       headerName: t('Available'),

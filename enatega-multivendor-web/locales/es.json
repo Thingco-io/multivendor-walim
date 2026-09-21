@@ -919,5 +919,12 @@
   "show_more_orders": "Mostrar más pedidos",
   "your_email": "tu@correo.com",
   "Select_your_address_prompt": "Selecciona tu dirección.",
-  "Our-brands": "Nuestras marcas"
+  "Our-brands": "Nuestras marcas",
+  "how_was_your_rider_title": "How was your rider?",
+  "rider_rating_modal_description": "Tell us how the delivery went — this goes to your rider, not the store",
+  "rider_label": "Rider",
+  "rider_rating_label": "Rider Rating",
+  "Rider_Politeness": "Rider politeness",
+  "Delivery_Speed": "Delivery speed",
+  "Order_Condition": "Order condition"
 }

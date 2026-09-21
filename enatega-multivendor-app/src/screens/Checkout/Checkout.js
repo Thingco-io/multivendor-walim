@@ -10,7 +10,7 @@ import { Modalize } from 'react-native-modalize'
 import { getTipping, orderFragment } from '../../apollo/queries'
 import { applyCoupon, placeOrder } from '../../apollo/mutations'
 import { scale } from '../../utils/scaling'
-import { stripeCurrencies, paypalCurrencies } from '../../utils/currencies'
+import { stripeCurrencies, paypalCurrencies, moyasarCurrencies } from '../../utils/currencies'
 import { theme } from '../../utils/themeColors'
 import MapView, { PROVIDER_DEFAULT } from 'react-native-maps'
 import ThemeContext from '../../ui/ThemeContext/ThemeContext'
@@ -403,6 +403,10 @@ function Checkout(props) {
         email: data?.placeOrder.user.email,
         currency: configuration.currency
       })
+    } else if (paymentMode === 'MOYASAR') {
+      props?.navigation.replace('MoyasarCheckout', {
+        _id: data?.placeOrder.orderId
+      })
     }
   }
   function onError(error) {
@@ -529,6 +533,9 @@ function Checkout(props) {
     }
     if (paymentMode === 'PAYPAL') {
       return paypalCurrencies.find((val) => val.currency === currency)
+    }
+    if (paymentMode === 'MOYASAR') {
+      return moyasarCurrencies.find((val) => val.currency === currency)
     }
     return true
   }
@@ -791,6 +798,17 @@ function Checkout(props) {
                             theme={currentTheme}
                             onSelect={() => {
                               setPaymentMode('STRIPE')
+                            }}
+                          />
+                        )}
+                        {moyasarCurrencies.find((val) => val.currency === configuration.currency) && (
+                          <PaymentModeOption
+                            title={t('moyasar')}
+                            icon={'credit-card'}
+                            selected={paymentMode === 'MOYASAR'}
+                            theme={currentTheme}
+                            onSelect={() => {
+                              setPaymentMode('MOYASAR')
                             }}
                           />
                         )}

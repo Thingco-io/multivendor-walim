@@ -7,5 +7,7 @@ export interface ICustomInputSwitchComponentProps
   isActive: boolean;
   label?: string;
   reverse?: boolean;
+  disabled?: boolean;
+  disabledTitle?: string;
   onChange: (e: ChangeEvent<HTMLInputElement>) => void;
 }

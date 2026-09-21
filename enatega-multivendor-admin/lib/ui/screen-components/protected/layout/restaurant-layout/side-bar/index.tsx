@@ -19,6 +19,7 @@ import {
   faMoneyBillTrendUp,
   faRectangleList,
   faStar,
+  faStarHalfStroke,
   faStore,
   faWallet,
 } from '@fortawesome/free-solid-svg-icons';
@@ -174,6 +175,15 @@ export default function MakeSidebar() {
       route: '/admin/store/ratings',
       isParent: true,
       icon: faStar,
+      isClickable: true,
+    },
+    {
+      // Delivery-side feedback: how customers rated the riders who delivered
+      // this store's orders, kept apart from the store's own reviews.
+      text: t('Rider Ratings'),
+      route: '/admin/store/rider-ratings',
+      isParent: true,
+      icon: faStarHalfStroke,
       isClickable: true,
     },
     {

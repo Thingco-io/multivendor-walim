@@ -163,3 +163,16 @@ export const PAYPAL_ALLOWED_CURRENCIES = [
   { currency: "THB", currency_symbol: "฿", type: "PAYPAL" },
   { currency: "USD", currency_symbol: "$", type: "PAYPAL" },
 ];
+
+// Keep in sync with helpers/currencies.js#moyasarCurrencies on the API.
+export const MOYASAR_ALLOWED_CURRENCIES = [
+  { currency: "SAR", currency_symbol: "ر.س", multiplier: 100, type: "MOYASAR" },
+  { currency: "USD", currency_symbol: "$", multiplier: 100, type: "MOYASAR" },
+  { currency: "AED", currency_symbol: "د.إ", multiplier: 100, type: "MOYASAR" },
+  { currency: "EUR", currency_symbol: "€", multiplier: 100, type: "MOYASAR" },
+  { currency: "GBP", currency_symbol: "£", multiplier: 100, type: "MOYASAR" },
+  { currency: "QAR", currency_symbol: "ر.ق", multiplier: 100, type: "MOYASAR" },
+  { currency: "KWD", currency_symbol: "د.ك", multiplier: 1000, type: "MOYASAR" },
+  { currency: "BHD", currency_symbol: ".د.ب", multiplier: 1000, type: "MOYASAR" },
+  { currency: "OMR", currency_symbol: "ر.ع.", multiplier: 1000, type: "MOYASAR" },
+];

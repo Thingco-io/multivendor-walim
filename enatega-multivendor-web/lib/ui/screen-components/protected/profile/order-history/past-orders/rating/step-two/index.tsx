@@ -11,6 +11,7 @@ const RenderStepTwo = ({
   handleAspectToggle,
   handleNext,
   handleSubmitDebounced,
+  aspects,
 }: IRenderStepTwoProps) => {
   const t = useTranslations();
   return (
@@ -18,6 +19,7 @@ const RenderStepTwo = ({
       <RenderAspects
         selectedAspects={selectedAspects}
         handleAspectToggle={handleAspectToggle}
+        aspects={aspects}
       />
       <CustomButton
         label={t("add_a_comment_button")}

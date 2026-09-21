@@ -655,5 +655,7 @@ export const vi = {
     "noMatchingResultsDesc": "Điều chỉnh bộ lọc của bạn để tìm kiếm những gì bạn đang tìm hoặc khám phá các lựa chọn khác.",
     "Applied Filters": 'Bộ lọc đã áp dụng',
     "WhatsApp is not installed on the device": "WhatsApp chưa được cài đặt trên thiết bị",
-    "Install it": "Cài đặt"
-  }
+    "Install it": "Cài đặt",
+  howWasRider: 'How was your delivery?',
+  tellAboutDelivery: 'Tell us about your delivery experience',
+}

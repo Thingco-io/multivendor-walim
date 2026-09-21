@@ -95,9 +95,11 @@ export const UserProvider = ({ children }: IUserProviderProps) => {
 
   useEffect(() => {
     const riderId = dataProfile?.rider?._id ?? userId;
-    const zoneIdValue = dataProfile?.rider?.zone?._id ?? zoneId;
+    // Vendor-managed riders are targeted by store assignment and may have no
+    // zone at all, so a missing zone must not stop the offers subscription.
+    const zoneIdValue = dataProfile?.rider?.zone?._id ?? zoneId ?? null;
 
-    if (!riderId || !zoneIdValue) return;
+    if (!riderId) return;
 
     // Add the order if it's not in the list yet, otherwise replace it in place.
     // Used for "update" events (e.g. status change / assignment coming through
@@ -138,6 +140,14 @@ export const UserProvider = ({ children }: IUserProviderProps) => {
         const { origin, order } = subscriptionData.data.subscriptionZoneOrders;
         if (origin === "new" || origin === "update") {
           return { riderOrders: upsertOrder(prev.riderOrders, order) };
+        } else if (origin === "remove") {
+          // Someone else took the order (or a store assigned it): drop it from
+          // the list right away instead of letting the rider try and fail.
+          return {
+            riderOrders: (prev.riderOrders ?? []).filter(
+              (o: IOrder) => o._id !== order._id
+            ),
+          };
         }
         return prev;
       },

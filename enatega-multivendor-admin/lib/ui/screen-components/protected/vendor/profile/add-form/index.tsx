@@ -248,7 +248,7 @@ export default function VendorUpdateForm({
                           key="image"
                           name="image"
                           title={t('Upload Profile Image')}
-                          fileTypes={['image/jpg', 'image/webp', 'image/jpeg']}
+                          fileTypes={['image/webp','image/jpg','image/png','image/jpeg','image/gif']}
                           maxFileHeight={1080}
                           maxFileWidth={1080}
                           maxFileSize={MAX_SQUARE_FILE_SIZE}

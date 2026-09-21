@@ -658,4 +658,6 @@ export const nl = {
     "Applied Filters": 'Toegepaste Filters',
     "WhatsApp is not installed on the device": "WhatsApp is niet geïnstalleerd op het apparaat",
     "Install it": "Installeer het",
-  }
+  howWasRider: 'How was your delivery?',
+  tellAboutDelivery: 'Tell us about your delivery experience',
+}

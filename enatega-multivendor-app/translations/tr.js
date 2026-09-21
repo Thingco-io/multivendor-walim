@@ -656,4 +656,6 @@ export const tr = {
     "Applied Filters": 'Uygulanan Filtreler',
     "WhatsApp is not installed on the device": "WhatsApp cihazda yüklü değil",
     "Install it": "Yükle",
-  }
+  howWasRider: 'How was your delivery?',
+  tellAboutDelivery: 'Tell us about your delivery experience',
+}

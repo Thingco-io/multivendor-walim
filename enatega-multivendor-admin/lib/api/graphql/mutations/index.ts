@@ -8,6 +8,7 @@ export * from './cuisines';
 export * from './dispatch';
 export * from './notifications';
 export * from './options';
+export * from './orders';
 export * from './restaurant';
 export * from './riders';
 export * from './taxations';

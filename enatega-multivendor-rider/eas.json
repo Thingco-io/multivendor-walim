@@ -15,6 +15,7 @@
       "developmentClient": false,
       "channel": "staging",
       "distribution": "internal",
+      "environment": "production",
       "android": {
         "buildType": "apk",
         "resourceClass": "large"

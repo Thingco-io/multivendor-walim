@@ -65,9 +65,12 @@ export const SoundProvider = ({ children }: ISoundContextProviderProps) => {
   // Use Effect
   useEffect(() => {
     if (assignedOrders) {
-      // Check if any order should play sound
+      // Check if any order should play sound. Must match the "New Orders" tab's
+      // definition of a new/unclaimed order (new-orders.tsx) - an ACCEPTED order
+      // that already has a rider assigned isn't a pending offer, so it must not
+      // keep the alert looping when it can never appear in that tab to be acted on.
       const new_order = assignedOrders?.find(
-        (o: IOrder) => o.orderStatus === "ACCEPTED" && !o?.isPickedUp,
+        (o: IOrder) => o.orderStatus === "ACCEPTED" && !o?.rider && !o?.isPickedUp,
       );
 
       const shouldPlaySound = !!new_order;

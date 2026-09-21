@@ -16,6 +16,9 @@ import {
 import {
   faArrowLeft,
   faHome,
+  faMotorcycle,
+  faRectangleList,
+  faStarHalfStroke,
   faUser,
   faStore,
 } from '@fortawesome/free-solid-svg-icons';
@@ -79,6 +82,30 @@ export default function MakeVendorSidebar() {
       route: '/admin/vendor/stores',
       isParent: true,
       icon: faStore,
+      isClickable: true,
+    },
+    {
+      // Orders across every store the vendor operates, including manual rider
+      // assignment for deliveries nobody has accepted yet.
+      text: t('Orders'),
+      route: '/admin/vendor/orders',
+      isParent: true,
+      icon: faRectangleList,
+      isClickable: true,
+    },
+    {
+      // The vendor's own riders and the stores each of them serves.
+      text: t('Riders'),
+      route: '/admin/vendor/riders',
+      isParent: true,
+      icon: faMotorcycle,
+      isClickable: true,
+    },
+    {
+      text: t('Rider Ratings'),
+      route: '/admin/vendor/rider-ratings',
+      isParent: true,
+      icon: faStarHalfStroke,
       isClickable: true,
     },
   ];

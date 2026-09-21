@@ -20,6 +20,7 @@ import Payment from '../screens/Payment/Payment'
 import Help from '../screens/Help/Help'
 import Paypal from '../screens/Paypal/Paypal'
 import StripeCheckout from '../screens/Stripe/StripeCheckout'
+import MoyasarCheckout from '../screens/Moyasar/MoyasarCheckout'
 import Profile from '../screens/Profile/Profile'
 import Addresses from '../screens/Addresses/Addresses'
 import NewAddress from '../screens/NewAddress/NewAddress'
@@ -198,6 +199,7 @@ function MainNavigator() {
       <NavigationStack.Screen name='RateAndReview' component={RateAndReview} />
 
       <NavigationStack.Screen name='StripeCheckout' component={StripeCheckout} />
+      <NavigationStack.Screen name='MoyasarCheckout' component={MoyasarCheckout} />
 
       {/* Authentication Login */}
       <NavigationStack.Screen name='CreateAccount' component={CreateAccount} />
@@ -254,7 +256,7 @@ function BottomTabNavigator() {
           height: Platform.OS === 'ios' ? 90 : 70,
           backgroundColor: currentTheme.cardBackground
         },
-        tabBarActiveTintColor: '#0EA5E9',
+        tabBarActiveTintColor: currentTheme.main,
         tabBarInactiveTintColor: currentTheme.fontNewColor,
         tabBarLabelStyle: { fontSize: 12 },
         headerRight: () => <RightButton icon='cart' iconColor={currentTheme.iconColor} menuHeader={false} t={t} />

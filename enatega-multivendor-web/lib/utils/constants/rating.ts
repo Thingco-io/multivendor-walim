@@ -10,3 +10,9 @@
 
   // Rating aspects for step 2
   export const ratingAspects = ["Courier_Professionalism", "Estimate", "Delivery_on_time"]
+  // Aspects offered when rating the delivery rider, as opposed to the store.
+  export const riderRatingAspects = [
+    "Rider_Politeness",
+    "Delivery_Speed",
+    "Order_Condition",
+  ]
