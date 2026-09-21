@@ -4,6 +4,7 @@ import { useContext, useState } from 'react';
 // Custom Components
 import ActionMenu from '@/lib/ui/useable-components/action-menu';
 import CustomInputSwitch from '../../custom-input-switch';
+import AssignedStoresStack from '../../assigned-stores-stack';
 
 // Interfaces and Types
 import { IActionMenuProps } from '@/lib/utils/interfaces/action-menu.interface';
@@ -79,28 +80,9 @@ export const VENDOR_RIDER_TABLE_COLUMNS = ({
     {
       headerName: t('Assigned Stores'),
       propertyName: 'assignedStores',
-      body: (rider: IRiderResponse) => {
-        const stores = rider.assignedStores ?? [];
-        if (!stores.length) {
-          return (
-            <span className="text-xs text-gray-400 dark:text-gray-500">
-              {t('No stores assigned')}
-            </span>
-          );
-        }
-        return (
-          <div className="flex max-w-[220px] flex-wrap gap-1">
-            {stores.map((store) => (
-              <span
-                key={store._id}
-                className="rounded-full border border-gray-300 px-2 py-[2px] text-xs dark:border-dark-600 dark:text-white"
-              >
-                {store.name}
-              </span>
-            ))}
-          </div>
-        );
-      },
+      body: (rider: IRiderResponse) => (
+        <AssignedStoresStack stores={rider.assignedStores} />
+      ),
     },
     {
       headerName: t('Vehicle Type'),
@@ -140,18 +122,22 @@ export const VENDOR_RIDER_TABLE_COLUMNS = ({
     {
       headerName: t('Active'),
       propertyName: 'isActive',
-      body: (rider: IRiderResponse) =>
-        isOwnRider(rider) ? (
+      body: (rider: IRiderResponse) => {
+        const own = isOwnRider(rider);
+        return (
           <CustomInputSwitch
             loading={rider._id === togglingId && loading}
             isActive={!!rider.isActive}
-            onChange={() => onToggleActive(rider)}
+            disabled={!own}
+            disabledTitle={
+              own
+                ? undefined
+                : t('Only the owning vendor can change this rider status')
+            }
+            onChange={() => own && onToggleActive(rider)}
           />
-        ) : (
-          <span className="text-xs text-gray-400 dark:text-gray-500">
-            {rider.isActive ? t('Active') : t('Inactive')}
-          </span>
-        ),
+        );
+      },
     },
     {
       propertyName: 'actions',

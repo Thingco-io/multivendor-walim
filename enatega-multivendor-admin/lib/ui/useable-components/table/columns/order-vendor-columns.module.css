@@ -1,0 +1,40 @@
+.dropDownItem :global(.p-dropdown-item) {
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.dropDownItem :global(.p-dropdown-item:last-child) {
+  border-bottom: none;
+}
+
+.dropdownField :global(.p-dropdown) {
+  border-radius: 0.5rem;
+  border: 1px solid #d1d5db;
+  box-shadow: none;
+  transition: border-color 0.15s ease;
+}
+
+.dropdownField :global(.p-dropdown:not(.p-disabled):hover) {
+  border-color: #9ca3af;
+}
+
+.dropdownField :global(.p-dropdown:not(.p-disabled).p-focus) {
+  border-color: #6b7280;
+  box-shadow: 0 0 0 1px #6b7280;
+}
+
+.dropdownField :global(.p-dropdown.p-disabled) {
+  background-color: #f9fafb;
+  opacity: 1;
+}
+
+:global(.dark) .dropdownField :global(.p-dropdown.p-disabled) {
+  background-color: var(--dark-900);
+}
+
+.dropdownPanel {
+  margin-top: 0.25rem;
+  border-radius: 0.5rem;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.14);
+  border: 1px solid #e5e7eb;
+  overflow: hidden;
+}

@@ -4,6 +4,7 @@ import { useContext, useState } from 'react';
 // Custom Components
 import ActionMenu from '@/lib/ui/useable-components/action-menu';
 import CustomInputSwitch from '../../custom-input-switch';
+import AssignedStoresStack from '../../assigned-stores-stack';
 
 // Interfaces and Types
 import { IActionMenuProps } from '@/lib/utils/interfaces/action-menu.interface';
@@ -99,26 +100,9 @@ export const RIDER_TABLE_COLUMNS = ({
       // are offered.
       headerName: t('Assigned Stores'),
       propertyName: 'assignedStores',
-      body: (rider: IRiderResponse) => {
-        const stores = rider.assignedStores ?? [];
-        if (!stores.length) {
-          return (
-            <span className="text-xs text-gray-400 dark:text-gray-500">-</span>
-          );
-        }
-        return (
-          <div className="flex max-w-[200px] flex-wrap gap-1">
-            {stores.map((store) => (
-              <span
-                key={store._id}
-                className="rounded-full border border-gray-300 px-2 py-[2px] text-xs dark:border-dark-600 dark:text-white"
-              >
-                {store.name}
-              </span>
-            ))}
-          </div>
-        );
-      },
+      body: (rider: IRiderResponse) => (
+        <AssignedStoresStack stores={rider.assignedStores} />
+      ),
     },
     {
       headerName: t('Rating'),

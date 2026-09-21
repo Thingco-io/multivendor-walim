@@ -1140,5 +1140,6 @@
   "You": "You",
   "Active": "Active",
   "Inactive": "Inactive",
-  "Platform (No Vendor)": "Platform (No Vendor)"
+  "Platform (No Vendor)": "Platform (No Vendor)",
+  "Only the owning vendor can change this rider status": "Only the owning vendor can change this rider status"
 }

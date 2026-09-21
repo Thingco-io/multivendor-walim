@@ -67,6 +67,7 @@ export interface IExtendedOrder extends IOrder {
   rider?: IOrderRider | null;
   assignedAt?: string | null;
   deliveredAt?: string | null;
+  isPickedUp?: boolean;
 }
 
 export interface IVendorOrdersPaginatedResponse {

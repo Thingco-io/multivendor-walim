@@ -9,7 +9,10 @@ import { Sidebar } from 'primereact/sidebar';
 import { IQueryResult, IDropdownSelectItem } from '@/lib/utils/interfaces';
 import { IRiderForm } from '@/lib/utils/interfaces/forms';
 import { IRiderResponse } from '@/lib/utils/interfaces/rider.interface';
-import { IRestaurantsByOwnerResponseGraphQL } from '@/lib/utils/interfaces';
+import {
+  IRestaurantsByOwnerResponseGraphQL,
+  IRiderZonesResponse,
+} from '@/lib/utils/interfaces';
 import { TSideBarFormPosition } from '@/lib/utils/types/sidebar';
 
 // Components
@@ -39,6 +42,7 @@ import {
   CREATE_RIDER,
   EDIT_RIDER,
   GET_RESTAURANTS_BY_OWNER,
+  GET_ZONES,
 } from '@/lib/api/graphql';
 
 interface IVendorRiderAddFormProps {
@@ -76,6 +80,12 @@ export default function VendorRiderAddForm({
     { id: vendorId },
     { enabled: !!vendorId, fetchPolicy: 'cache-and-network' }
   ) as IQueryResult<IRestaurantsByOwnerResponseGraphQL | undefined, undefined>;
+
+  const { data: zonesData } = useQueryGQL(
+    GET_ZONES,
+    {},
+    { fetchPolicy: 'cache-and-network' }
+  ) as IQueryResult<IRiderZonesResponse | undefined, undefined>;
 
   const storeOptions: IDropdownSelectItem[] = useMemo(
     () =>
@@ -124,6 +134,9 @@ export default function VendorRiderAddForm({
           phone: values.phone?.toString(),
           vehicleType: values.vehicleType?.code,
           available: rider ? rider.available : true,
+          // The rider always belongs to the signed-in vendor; sent explicitly
+          // so it can never be dropped regardless of how the input is built.
+          vendor: vendorId,
           assignedStores: (values.assignedStores ?? []).map(
             (store) => store.code
           ),
@@ -323,6 +336,25 @@ export default function VendorRiderAddForm({
                               ) && touched?.phone
                                 ? 'red'
                                 : '',
+                          }}
+                        />
+
+                        {/* Optional — a vendor rider is dispatched by store
+                            assignment, but a zone can still be recorded. */}
+                        <CustomDropdownComponent
+                          placeholder={t('Zone')}
+                          options={
+                            zonesData?.zones.map((val) => ({
+                              label: val.title,
+                              code: val._id,
+                            })) || []
+                          }
+                          showLabel={true}
+                          name="zone"
+                          selectedItem={values.zone}
+                          setSelectedItem={setFieldValue}
+                          style={{
+                            borderColor: errors?.zone ? 'red' : '',
                           }}
                         />
 

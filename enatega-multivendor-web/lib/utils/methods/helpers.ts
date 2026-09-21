@@ -1,4 +1,5 @@
 import {
+  MOYASAR_ALLOWED_CURRENCIES,
   PAYPAL_ALLOWED_CURRENCIES,
   STRIPE_ALLOWED_CURRENCIES,
 } from "../constants/currencies";
@@ -159,6 +160,9 @@ export function checkPaymentMethod(currency: string, paymentMethod: string) {
   }
   if (paymentMethod === "PAYPAL") {
     return PAYPAL_ALLOWED_CURRENCIES.find((val) => val.currency === currency);
+  }
+  if (paymentMethod === "MOYASAR") {
+    return MOYASAR_ALLOWED_CURRENCIES.find((val) => val.currency === currency);
   }
   return true;
 }

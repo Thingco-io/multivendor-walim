@@ -62,6 +62,8 @@ export const GET_RIDERS_PAGINATED = gql`
         assignedStores {
           _id
           name
+          image
+          address
         }
       }
       totalCount

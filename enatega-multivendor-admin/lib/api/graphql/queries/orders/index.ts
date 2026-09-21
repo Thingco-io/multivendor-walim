@@ -142,6 +142,7 @@ export const GET_ORDER_BY_RESTAURANT = gql`
         paymentStatus
         reason
         isActive
+        isPickedUp
         createdAt
         deliveryCharges
         tipping

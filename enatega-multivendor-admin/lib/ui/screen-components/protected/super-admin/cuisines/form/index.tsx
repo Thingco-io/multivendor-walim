@@ -276,7 +276,7 @@ export default function CuisineForm({
                     showExistingImage={
                       isEditing.bool && isEditing.data.image ? true : false
                     }
-                    fileTypes={['image/jpeg', 'image/jpg', 'image/webp']}
+                    fileTypes={['image/webp','image/jpg','image/png','image/jpeg','image/gif']}
                     maxFileHeight={1080}
                     maxFileWidth={1080}
                     maxFileSize={MAX_SQUARE_FILE_SIZE}

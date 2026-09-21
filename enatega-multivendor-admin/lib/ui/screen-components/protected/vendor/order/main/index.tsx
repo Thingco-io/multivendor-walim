@@ -1,10 +1,14 @@
-import React, { useContext, useEffect, useMemo, useState } from 'react';
+import React, { useContext, useEffect, useMemo, useRef, useState } from 'react';
+import { useSubscription } from '@apollo/client';
 import Table from '@/lib/ui/useable-components/table';
 import { useQueryGQL } from '@/lib/hooks/useQueryQL';
 import OrderTableHeader from '../header/table-header';
 import { IQueryResult } from '@/lib/utils/interfaces';
 import { RestaurantLayoutContext } from '@/lib/context/restaurant/layout-restaurant.context';
-import { GET_ORDER_BY_RESTAURANT } from '@/lib/api/graphql';
+import {
+  GET_ORDER_BY_RESTAURANT,
+  SUBSCRIPTION_PLACE_ORDER,
+} from '@/lib/api/graphql';
 import { ORDER_COLUMNS } from '@/lib/ui/useable-components/table/columns/order-vendor-columns';
 import OrderTableSkeleton from '@/lib/ui/useable-components/custom-skeletons/orders.vendor.row.skeleton';
 import {
@@ -51,6 +55,33 @@ export default function OrderVendorMain() {
       enabled: !!restaurantId,
     }
   ) as IQueryResult<IOrdersByRestaurantPaginatedResponse | undefined, undefined>;
+
+  // New orders land on the backend's PLACE_ORDER channel as soon as a
+  // customer checks out; refetch the list so the store sees it live instead
+  // of only after a manual refresh.
+  const { data: newOrderData } = useSubscription(SUBSCRIPTION_PLACE_ORDER, {
+    variables: { restaurant: restaurantId },
+    skip: !restaurantId,
+  });
+
+  const refetchTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  useEffect(() => {
+    if (!newOrderData) return;
+
+    if (refetchTimeoutRef.current) {
+      clearTimeout(refetchTimeoutRef.current);
+    }
+    refetchTimeoutRef.current = setTimeout(() => {
+      refetch?.();
+    }, 500);
+
+    return () => {
+      if (refetchTimeoutRef.current) {
+        clearTimeout(refetchTimeoutRef.current);
+      }
+    };
+  }, [newOrderData, refetch]);
 
   const handleSearch = (newSearchTerm: string) => {
     setSearchTerm(newSearchTerm);
@@ -106,7 +137,7 @@ export default function OrderVendorMain() {
         data={displayData as IExtendedOrder[]}
         setSelectedData={setSelectedData}
         selectedData={selectedData}
-        columns={ORDER_COLUMNS()}
+        columns={ORDER_COLUMNS(restaurantId ?? '', () => refetch?.())}
         loading={loading}
         handleRowClick={handleRowClick}
         moduleName="Restaurant-Order"

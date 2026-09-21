@@ -176,7 +176,7 @@ export default function VendorUpdateForms() {
                                 title=""
                                 page="vendor-profile-edit"
                                 // onChange={memoizedCallback}
-                                fileTypes={['image/png', 'image/jpg']}
+                                fileTypes={['image/webp','image/jpg','image/png','image/jpeg','image/gif']}
                                 maxFileHeight={512}
                                 maxFileWidth={512}
                                 maxFileSize={MAX_SQUARE_FILE_SIZE}

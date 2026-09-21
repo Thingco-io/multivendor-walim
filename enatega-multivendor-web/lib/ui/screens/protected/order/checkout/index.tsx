@@ -866,6 +866,11 @@ export default function OrderCheckoutScreen() {
         Date.now().toString(),
       );
       router.replace(stripeCheckoutUrl);
+    } else if (paymentMethod === "MOYASAR") {
+      // Cart/coupon are intentionally left untouched here: the card form is
+      // completed on our own /moyasar page, and the cart is only cleared
+      // once payment is actually confirmed (see the order tracking screen).
+      router.replace(`/moyasar?id=${data?.placeOrder?.orderId}`);
     }
   }
 
@@ -963,11 +968,15 @@ export default function OrderCheckoutScreen() {
     [],
   );
 
-  // Filter PAYMENT_METHOD_LIST based on stripeDetailsSubmitted
-  const filteredPaymentMethods = !finalRestaurantData?.restaurant
-    ?.stripeDetailsSubmitted
-    ? PAYMENT_METHOD_LIST.filter((method) => method.value === "COD")
-    : PAYMENT_METHOD_LIST;
+  // STRIPE requires the restaurant to have completed Stripe Connect
+  // onboarding (marketplace payouts); MOYASAR has no such per-restaurant
+  // step, so it stays available alongside COD regardless of that flag.
+  const filteredPaymentMethods = PAYMENT_METHOD_LIST.filter((method) => {
+    if (method.value === "STRIPE") {
+      return !!finalRestaurantData?.restaurant?.stripeDetailsSubmitted;
+    }
+    return true;
+  });
 
   // Use Effect
   useEffect(() => {
