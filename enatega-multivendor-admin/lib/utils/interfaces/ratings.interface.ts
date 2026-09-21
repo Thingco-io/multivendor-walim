@@ -46,6 +46,7 @@ export interface ICustomDataViewProps extends IGlobalComponentProps {
   onPage?: (event: { first: number; rows: number; page?: number }) => void;
   lazy?: boolean;
   loading?: boolean;
+  emptyMessage?: string;
 }
 
 export interface IItem extends IGlobalComponentProps {

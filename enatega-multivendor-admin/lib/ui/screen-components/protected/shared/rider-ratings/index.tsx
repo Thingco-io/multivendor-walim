@@ -1,15 +1,14 @@
 'use client';
 
 // Core
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useState } from 'react';
 
 // Prime React
-import { Rating } from 'primereact/rating';
+import { DataView } from 'primereact/dataview';
 
 // Components
-import Table from '@/lib/ui/useable-components/table';
-import CustomTextField from '@/lib/ui/useable-components/input-field';
-import CustomDropdownComponent from '@/lib/ui/useable-components/custom-dropdown';
+import ProfileCard from '@/lib/ui/useable-components/Icon-Card';
+import RatingsHeaderDataView from '@/lib/ui/screen-components/protected/restaurant/ratings/header/table-header';
 
 // Hooks
 import { useQueryGQL } from '@/lib/hooks/useQueryQL';
@@ -17,7 +16,7 @@ import useDebounce from '@/lib/hooks/useDebounce';
 import { useTranslations } from 'next-intl';
 
 // Interfaces
-import { IDropdownSelectItem, IQueryResult } from '@/lib/utils/interfaces';
+import { IQueryResult } from '@/lib/utils/interfaces';
 import {
   IRiderReview,
   IRiderReviewsPaginatedResponse,
@@ -38,9 +37,9 @@ interface IRiderRatingsListProps {
   vendorId?: string;
   /** Restricts the list to one store — supplied by the Store Dashboard. */
   storeId?: string;
-  /** Store filter dropdown; omit to hide it (Store Dashboard). */
+  /** Kept for screens that already pass store data into this shared view. */
   stores?: IRiderStore[];
-  /** Show the vendor column — Super Admin only. */
+  /** Kept for screens that previously toggled a table-only vendor column. */
   showVendorColumn?: boolean;
 }
 
@@ -56,14 +55,6 @@ const formatDate = (value?: string | null) => {
   });
 };
 
-const RATING_FILTERS: IDropdownSelectItem[] = [
-  { label: '5 ★', code: '5' },
-  { label: '4 ★', code: '4' },
-  { label: '3 ★', code: '3' },
-  { label: '2 ★', code: '2' },
-  { label: '1 ★', code: '1' },
-];
-
 /**
  * Rider ratings and customer reviews.
  *
@@ -75,23 +66,35 @@ export default function RiderRatingsList({
   riderId,
   vendorId,
   storeId,
-  stores,
-  showVendorColumn = false,
 }: IRiderRatingsListProps) {
   // Hooks
   const t = useTranslations();
 
   // States
-  const [selectedRows, setSelectedRows] = useState<IRiderReview[]>([]);
   const [searchValue, setSearchValue] = useState('');
-  const [selectedStore, setSelectedStore] =
-    useState<IDropdownSelectItem | null>(null);
-  const [ratingFilter, setRatingFilter] = useState<IDropdownSelectItem | null>(
-    null
-  );
+  const [selectedActions, setSelectedActions] = useState<string[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
-  const [rowsPerPage, setRowsPerPage] = useState(10);
+  const [rowsPerPage, setRowsPerPage] = useState(5);
   const debouncedSearch = useDebounce(searchValue, 500);
+
+  const ratingRange =
+    selectedActions.length === 1 ? selectedActions[0] : undefined;
+  const minRating =
+    ratingRange === '1-2 stars'
+      ? 1
+      : ratingRange === '3-4 stars'
+        ? 3
+        : ratingRange === '5 stars'
+          ? 5
+          : undefined;
+  const maxRating =
+    ratingRange === '1-2 stars'
+      ? 2
+      : ratingRange === '3-4 stars'
+        ? 4
+        : ratingRange === '5 stars'
+          ? 5
+          : undefined;
 
   const { data, loading } = useQueryGQL(
     GET_RIDER_REVIEWS_PAGINATED,
@@ -101,161 +104,58 @@ export default function RiderRatingsList({
       search: debouncedSearch || undefined,
       riderId: riderId ?? undefined,
       vendorId: vendorId ?? undefined,
-      storeId: storeId ?? selectedStore?.code ?? undefined,
-      minRating: ratingFilter ? Number(ratingFilter.code) : undefined,
-      maxRating: ratingFilter ? Number(ratingFilter.code) : undefined,
+      storeId: storeId ?? undefined,
+      minRating,
+      maxRating,
     },
     { fetchPolicy: 'network-only' }
   ) as IQueryResult<IRiderReviewsPaginatedResponse | undefined, undefined>;
 
   useEffect(() => {
     setCurrentPage(1);
-  }, [debouncedSearch, selectedStore?.code, ratingFilter?.code]);
+  }, [debouncedSearch, ratingRange]);
 
-  const columns = useMemo(() => {
-    const base = [
-      {
-        headerName: t('Rider'),
-        propertyName: 'rider',
-        body: (review: IRiderReview) => (
-          <div className="flex flex-col">
-            <span className="dark:text-white">{review.rider?.name ?? '-'}</span>
-            {review.rider?.ratingCount ? (
-              <span className="text-xs text-gray-400">
-                ★ {Number(review.rider.ratingAverage ?? 0).toFixed(2)} (
-                {review.rider.ratingCount})
-              </span>
-            ) : null}
-          </div>
-        ),
-      },
-      {
-        headerName: t('Store'),
-        propertyName: 'restaurant',
-        body: (review: IRiderReview) => review.restaurant?.name ?? '-',
-      },
-      {
-        headerName: t('Order ID'),
-        propertyName: 'order',
-        body: (review: IRiderReview) => review.order?.orderId ?? '-',
-      },
-      {
-        headerName: t('Rating'),
-        propertyName: 'rating',
-        body: (review: IRiderReview) => (
-          <Rating
-            value={review.rating}
-            readOnly
-            cancel={false}
-            className="flex"
-            pt={{
-              onIcon: { className: 'text-amber-500' },
-              offIcon: { className: 'text-amber-500' },
-            }}
-          />
-        ),
-      },
-      {
-        headerName: t('Review'),
-        propertyName: 'description',
-        body: (review: IRiderReview) => (
-          <div className="flex max-w-[280px] flex-col gap-1">
-            <span className="break-words text-sm dark:text-gray-300">
-              {review.description || '-'}
-            </span>
-            {review.comments ? (
-              <span className="w-fit rounded-full border border-gray-300 px-2 py-[2px] text-xs dark:border-dark-600 dark:text-gray-300">
-                {review.comments}
-              </span>
-            ) : null}
-          </div>
-        ),
-      },
-      {
-        headerName: t('Date'),
-        propertyName: 'createdAt',
-        body: (review: IRiderReview) => (
-          <span className="whitespace-nowrap">
-            {formatDate(review.createdAt)}
-          </span>
-        ),
-      },
-    ];
+  const itemTemplate = (review: IRiderReview) => (
+    <div className="col-12 mb-2">
+      <ProfileCard
+        name={review.rider?.name ?? t('Rider')}
+        orderedItems={review.restaurant?.name ?? ''}
+        rating={review.rating}
+        imageSrc={review.restaurant?.image ?? ''}
+        comments={review.comments ?? undefined}
+        reviewContent={review.description ?? ''}
+        orderId={review.order?.orderId ?? ''}
+        createdAt={formatDate(review.createdAt)}
+      />
+    </div>
+  );
 
-    // Drop columns the caller already knows: the store on a Store Dashboard,
-    // the rider on a rider's own detail page.
-    return base.filter((column) => {
-      if (storeId && column.propertyName === 'restaurant') return false;
-      if (riderId && column.propertyName === 'rider') return false;
-      return true;
-    });
-  }, [riderId, storeId, t, showVendorColumn]);
+  const reviews = data?.riderReviewsPaginated?.data ?? [];
 
   return (
     <div className="p-3">
-      <Table
-        header={
-          <div className="mb-4 flex flex-col items-start gap-3 sm:flex-row sm:items-center">
-            <div className="w-60">
-              <CustomTextField
-                type="text"
-                name="riderReviewFilter"
-                maxLength={60}
-                showLabel={false}
-                value={searchValue}
-                onChange={(e) => setSearchValue(e.target.value)}
-                placeholder={t('Keyword Search')}
-              />
-            </div>
-
-            {!storeId && stores?.length ? (
-              <div className="w-56">
-                <CustomDropdownComponent
-                  name="storeFilter"
-                  placeholder={t('All Stores')}
-                  showLabel={false}
-                  showClear
-                  options={stores.map((store) => ({
-                    label: store.name,
-                    code: store._id,
-                  }))}
-                  selectedItem={selectedStore}
-                  setSelectedItem={(
-                    _name: string,
-                    value: IDropdownSelectItem
-                  ) => setSelectedStore(value)}
-                />
-              </div>
-            ) : null}
-
-            <div className="w-40">
-              <CustomDropdownComponent
-                name="ratingFilter"
-                placeholder={t('Rating')}
-                showLabel={false}
-                showClear
-                filter={false}
-                options={RATING_FILTERS}
-                selectedItem={ratingFilter}
-                setSelectedItem={(_name: string, value: IDropdownSelectItem) =>
-                  setRatingFilter(value)
-                }
-              />
-            </div>
-          </div>
-        }
-        data={data?.riderReviewsPaginated?.data ?? []}
-        setSelectedData={setSelectedRows}
-        selectedData={selectedRows}
-        loading={loading}
-        columns={columns}
+      <DataView
+        value={reviews}
+        itemTemplate={itemTemplate}
+        paginator
+        rows={rowsPerPage}
+        layout="grid"
         totalRecords={data?.riderReviewsPaginated?.totalCount ?? 0}
-        currentPage={data?.riderReviewsPaginated?.currentPage ?? currentPage}
-        rowsPerPage={rowsPerPage}
-        onPageChange={(page, rowCount) => {
-          setCurrentPage(page);
-          setRowsPerPage(rowCount);
+        first={(currentPage - 1) * rowsPerPage}
+        lazy
+        loading={loading}
+        emptyMessage={t('No records found')}
+        onPage={(event) => {
+          setCurrentPage(Math.floor(event.first / event.rows) + 1);
+          setRowsPerPage(event.rows);
         }}
+        header={
+          <RatingsHeaderDataView
+            setSelectedActions={setSelectedActions}
+            selectedActions={selectedActions}
+            onSearch={setSearchValue}
+          />
+        }
       />
     </div>
   );

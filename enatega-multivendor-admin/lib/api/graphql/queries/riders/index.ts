@@ -265,6 +265,7 @@ export const GET_RIDER_REVIEWS_PAGINATED = gql`
         restaurant {
           _id
           name
+          image
         }
         order {
           _id

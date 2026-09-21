@@ -72,30 +72,25 @@ const RatingMain: React.FC = () => {
 
   return (
     <div className="p-3">
-      {!data || !data.restaurantReviewsPaginated?.data?.length ? (
-        <div className="text-center">
-          <p className="mt-8 text-gray-600 dark:text-white">{t('No records found')}</p>
-        </div>
-      ) : (
-        <CustomDataView
-          products={data.restaurantReviewsPaginated.data as IReview[]}
-          header={
-            <RatingsHeaderDataView
-              setSelectedActions={setSelectedActions}
-              selectedActions={selectedActions}
-              onSearch={handleSearch}
-            />
-          }
-          rows={rowsPerPage}
-          totalRecords={data.restaurantReviewsPaginated.totalCount}
-          first={(currentPage - 1) * rowsPerPage}
-          lazy
-          onPage={(event) => {
-            setCurrentPage(Math.floor(event.first / event.rows) + 1);
-            setRowsPerPage(event.rows);
-          }}
-        />
-      )}
+      <CustomDataView
+        products={(data?.restaurantReviewsPaginated?.data ?? []) as IReview[]}
+        header={
+          <RatingsHeaderDataView
+            setSelectedActions={setSelectedActions}
+            selectedActions={selectedActions}
+            onSearch={handleSearch}
+          />
+        }
+        rows={rowsPerPage}
+        totalRecords={data?.restaurantReviewsPaginated?.totalCount ?? 0}
+        first={(currentPage - 1) * rowsPerPage}
+        lazy
+        emptyMessage={t('No records found')}
+        onPage={(event) => {
+          setCurrentPage(Math.floor(event.first / event.rows) + 1);
+          setRowsPerPage(event.rows);
+        }}
+      />
     </div>
   );
 };

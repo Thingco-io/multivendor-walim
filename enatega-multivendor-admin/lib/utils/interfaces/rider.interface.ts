@@ -178,7 +178,7 @@ export interface IRiderReview {
     ratingAverage?: number;
     ratingCount?: number;
   } | null;
-  restaurant: { _id: string; name: string } | null;
+  restaurant: { _id: string; name: string; image?: string | null } | null;
   order: { _id: string; orderId: string; deliveredAt?: string | null } | null;
 }
 

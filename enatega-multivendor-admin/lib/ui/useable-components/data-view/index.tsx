@@ -14,6 +14,7 @@ const CustomDataView: React.FC<ICustomDataViewProps> = ({
   first = 0,
   onPage,
   lazy = false,
+  emptyMessage,
 }) => {
   const itemTemplate = (review: IReview) => {
     const orderedItems = review?.createdAt
@@ -53,6 +54,7 @@ const CustomDataView: React.FC<ICustomDataViewProps> = ({
         first={first}
         onPage={onPage}
         lazy={lazy}
+        emptyMessage={emptyMessage}
       />
     </div>
   );
