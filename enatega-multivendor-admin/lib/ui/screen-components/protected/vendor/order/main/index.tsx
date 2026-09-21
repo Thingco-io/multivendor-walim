@@ -56,9 +56,12 @@ export default function OrderVendorMain() {
     }
   ) as IQueryResult<IOrdersByRestaurantPaginatedResponse | undefined, undefined>;
 
-  // New orders land on the backend's PLACE_ORDER channel as soon as a
-  // customer checks out; refetch the list so the store sees it live instead
-  // of only after a manual refresh.
+  // The PLACE_ORDER channel carries every order event for this restaurant
+  // (new placements, status changes, rider assignment, etc. all publish to
+  // it via publishToDashboard), not just brand new orders - so this must
+  // check `origin` and only refetch on "new", or the table refetches (and
+  // flashes back to its loading skeleton) on every unrelated status update
+  // too, which looks like it's reloading nonstop.
   const { data: newOrderData } = useSubscription(SUBSCRIPTION_PLACE_ORDER, {
     variables: { restaurant: restaurantId },
     skip: !restaurantId,
@@ -67,7 +70,7 @@ export default function OrderVendorMain() {
   const refetchTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {
-    if (!newOrderData) return;
+    if (newOrderData?.subscribePlaceOrder?.origin !== 'new') return;
 
     if (refetchTimeoutRef.current) {
       clearTimeout(refetchTimeoutRef.current);

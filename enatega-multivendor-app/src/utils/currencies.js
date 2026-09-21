@@ -136,6 +136,20 @@ export const stripeCurrencies = [
   { currency: 'ZMW', currencySymbol: 'ZK', multiplier: 100, type: 'STRIPE' }
 ]
 
+// Moyasar is aimed at Saudi/GCC merchants; keep this list in sync with
+// helpers/currencies.js (moyasarCurrencies) in the backend.
+export const moyasarCurrencies = [
+  { currency: 'SAR', currencySymbol: 'ر.س', multiplier: 100, type: 'MOYASAR' },
+  { currency: 'USD', currencySymbol: '$', multiplier: 100, type: 'MOYASAR' },
+  { currency: 'AED', currencySymbol: 'د.إ', multiplier: 100, type: 'MOYASAR' },
+  { currency: 'EUR', currencySymbol: '€', multiplier: 100, type: 'MOYASAR' },
+  { currency: 'GBP', currencySymbol: '£', multiplier: 100, type: 'MOYASAR' },
+  { currency: 'QAR', currencySymbol: 'ر.ق', multiplier: 100, type: 'MOYASAR' },
+  { currency: 'KWD', currencySymbol: 'د.ك', multiplier: 1000, type: 'MOYASAR' },
+  { currency: 'BHD', currencySymbol: '.د.ب', multiplier: 1000, type: 'MOYASAR' },
+  { currency: 'OMR', currencySymbol: 'ر.ع.', multiplier: 1000, type: 'MOYASAR' }
+]
+
 export const paypalCurrencies = [
   { currency: 'AUD', currencySymbol: '$', type: 'PAYPAL' },
   { currency: 'BRL', currencySymbol: 'R$', type: 'PAYPAL' },
