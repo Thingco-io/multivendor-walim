@@ -12,6 +12,7 @@ const MoveableCard: React.FC<MoveableProps> = ({
   middle = false,
   height = "600px",
   fit = "cover",
+  sizes = "(max-width: 700px) 100vw, 50vw",
 }) => {
   const [responsiveHeight, setResponsiveHeight] = useState(height);
 
@@ -45,7 +46,7 @@ const MoveableCard: React.FC<MoveableProps> = ({
         }
         alt="Main Image"
         fill
-        sizes="(max-width: 700px) 100vw, 600px"
+        sizes={sizes}
         className={`${styles.imageContainer} c`}
         style={{ objectFit: fit }}
       />

@@ -21,7 +21,8 @@ export interface buttonProps{
     middle?:boolean,
     height?:string,
     link?:string,
-    fit?: "cover" | "contain"
+    fit?: "cover" | "contain",
+    sizes?: string
     }
 
   
