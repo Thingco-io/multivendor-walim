@@ -41,8 +41,8 @@ const { height } = Dimensions.get('screen')
 const TOP_BAR_HEIGHT = height * 0.05
 const CATEGORY_BAR_HEIGHT = scale(56)
 const HEADER_MAX_HEIGHT =
-  Platform.OS === 'android' ? height * 0.65 : height * 0.61
-const HEADER_MIN_HEIGHT = height * 0.07 + TOP_BAR_HEIGHT + CATEGORY_BAR_HEIGHT
+  Platform.OS === 'android' ? height * 0.57 : height * 0.54
+const HEADER_MIN_HEIGHT = TOP_BAR_HEIGHT + CATEGORY_BAR_HEIGHT
 const SCROLL_RANGE = HEADER_MAX_HEIGHT - HEADER_MIN_HEIGHT
 
 function ImageTextCenterHeader(props, ref) {

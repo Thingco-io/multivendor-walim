@@ -36,10 +36,10 @@ const { height } = Dimensions.get('screen')
 const AnimatedSectionList = Animated.createAnimatedComponent(SectionList)
 const TOP_BAR_HEIGHT = height * 0.05
 const CATEGORY_BAR_HEIGHT = scale(56)
-const HEADER_MAX_HEIGHT = Platform.OS === 'android' ? height * 0.65 : height * 0.61
-const HEADER_MIN_HEIGHT = height * 0.07 + TOP_BAR_HEIGHT + CATEGORY_BAR_HEIGHT
+const HEADER_MAX_HEIGHT = Platform.OS === 'android' ? height * 0.57 : height * 0.54
+const HEADER_MIN_HEIGHT = TOP_BAR_HEIGHT + CATEGORY_BAR_HEIGHT
 const SCROLL_RANGE = HEADER_MAX_HEIGHT - HEADER_MIN_HEIGHT
-const HALF_HEADER_SCROLL = HEADER_MAX_HEIGHT - TOP_BAR_HEIGHT
+const SNAP_THRESHOLD = SCROLL_RANGE / 2
 
 const POPULAR_ITEMS = gql`
   ${popularItems}
@@ -314,13 +314,36 @@ function Restaurant(props) {
     easing: EasingNode.inOut(EasingNode.ease)
   })
 
+  const scrollToHeaderPosition = (offset, animated = true) => {
+    const list = scrollRef.current
+    if (!list) return
+
+    if (typeof list.getScrollResponder === 'function') {
+      const responder = list.getScrollResponder()
+      if (typeof responder?.scrollTo === 'function') {
+        responder.scrollTo({ y: offset, animated })
+        return
+      }
+    }
+
+    if (typeof list.scrollToLocation === 'function') {
+      list.scrollToLocation({
+        animated,
+        sectionIndex: 0,
+        itemIndex: 0,
+        viewOffset: offset === 0 ? HEADER_MAX_HEIGHT : HEADER_MIN_HEIGHT,
+        viewPosition: 0
+      })
+    }
+  }
+
   const scrollToSection = (index) => {
     if (scrollRef.current != null) {
       scrollRef.current.scrollToLocation({
         animated: true,
         sectionIndex: index,
         itemIndex: 0,
-        viewOffset: -(HEADER_MAX_HEIGHT - HEADER_MIN_HEIGHT),
+        viewOffset: HEADER_MIN_HEIGHT,
         viewPosition: 0
       })
     }
@@ -330,43 +353,20 @@ function Restaurant(props) {
     event.persist()
     const y = event.nativeEvent.contentOffset.y
 
-    if (y > 0 && y < HALF_HEADER_SCROLL / 2) {
-      if (scrollRef.current) {
-        withTiming(translationY.value, config(0), (finished) => {
-          if (finished) {
-            scrollRef.current.scrollToLocation({
-              animated: false,
-              sectionIndex: 0,
-              itemIndex: 0,
-              viewOffset: HEADER_MAX_HEIGHT - HEADER_MIN_HEIGHT,
-              viewPosition: 0
-            })
-          }
-        })
-      }
-    } else if (HALF_HEADER_SCROLL / 2 <= y && y < HALF_HEADER_SCROLL) {
-      if (scrollRef.current) {
-        withTiming(translationY.value, config(SCROLL_RANGE), (finished) => {
-          if (finished) {
-            scrollRef.current.scrollToLocation({
-              animated: false,
-              sectionIndex: 0,
-              itemIndex: 0,
-              viewOffset: -(HEADER_MAX_HEIGHT - HEADER_MIN_HEIGHT),
-              viewPosition: 0
-            })
-          }
-        })
-      }
+    if (y > 0 && y < SNAP_THRESHOLD) {
+      scrollToHeaderPosition(0)
+      translationY.value = withTiming(0, config(0))
+    } else if (SNAP_THRESHOLD <= y && y < SCROLL_RANGE) {
+      scrollToHeaderPosition(SCROLL_RANGE)
+      translationY.value = withTiming(SCROLL_RANGE, config(SCROLL_RANGE))
     }
     buttonClickedSetter(false)
   }
 
-  // Fixed scroll handler with safety checks
+  // Keep the collapsible header in sync with the full-screen product list.
   const scrollHandler = useAnimatedScrollHandler((event) => {
     const offsetY = event.contentOffset.y
-    // Clamp the value to prevent extremely small or negative values
-    translationY.value = Math.max(0, offsetY)
+    translationY.value = Math.min(SCROLL_RANGE, Math.max(0, offsetY))
   })
 
   function changeIndex(index) {
@@ -574,15 +574,14 @@ function Restaurant(props) {
             <AnimatedSectionList
               style={[
                 {
-                  flexGrow: 1,
-                  paddingTop: HEADER_MAX_HEIGHT - HEADER_MIN_HEIGHT,
-                  marginTop: HEADER_MIN_HEIGHT,
-                  zIndex: -1
+                  flex: 1,
+                  zIndex: 0
                 }
                 // zIndexAnimation
               ]}
               contentContainerStyle={{
-                paddingBottom: HEADER_MAX_HEIGHT - HEADER_MIN_HEIGHT
+                paddingTop: HEADER_MAX_HEIGHT,
+                paddingBottom: cartCount > 0 ? scale(96) : scale(24)
               }}
               ref={scrollRef}
               sections={updatedDeals}
@@ -669,10 +668,13 @@ function Restaurant(props) {
                 }
                 return (
                   <TouchableOpacity
-                    style={
-                      // styles(currentTheme).dealSection
-                      [{ paddingHorizontal: scale(12) }, (styles(currentTheme).dealSection, { opacity: item.isOutOfStock ? 0.5 : 1 })]
-                    }
+                    style={[
+                      styles(currentTheme).dealSection,
+                      {
+                        paddingVertical: scale(8),
+                        opacity: item.isOutOfStock ? 0.5 : 1
+                      }
+                    ]}
                     activeOpacity={0.7}
                     onPress={() => {
                       if (item?.isOutOfStock) {
@@ -697,9 +699,9 @@ function Restaurant(props) {
                       <View style={styles(currentTheme).deal}>
                         <Image
                           style={{
-                            height: scale(60),
-                            width: scale(60),
-                            borderRadius: 30
+                            height: scale(64),
+                            width: scale(64),
+                            borderRadius: scale(32)
                           }}
                           source={{ uri: imageUrl }}
                         />

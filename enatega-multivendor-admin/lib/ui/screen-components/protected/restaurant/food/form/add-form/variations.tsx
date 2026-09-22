@@ -184,15 +184,40 @@ export default function VariationAddForm({
           };
         }
       );
+
+      const foodData = foodContextData?.food?.data;
+      const title = foodData?.title?.trim();
+      const category =
+        typeof foodData?.category === 'string'
+          ? foodData.category
+          : foodData?.category?.code;
+
+      if (!title || !category) {
+        showToast({
+          type: 'error',
+          title: t('New Food'),
+          message: 'Title and category are required before saving the food.',
+          duration: 2500,
+        });
+        return;
+      }
+
       const foodInput = {
         _id: foodContextData?.food?._id ?? '',
         restaurant: restaurantId,
-        ...foodContextData?.food?.data,
-        category: foodContextData?.food?.data.category?.code,
-        subCategory: foodContextData?.food?.data.subCategory?.code,
+        title,
+        description: foodData?.description ?? '',
+        category,
+        subCategory:
+          typeof foodData?.subCategory === 'string'
+            ? foodData.subCategory
+            : foodData?.subCategory?.code,
+        image: foodData?.image ?? '',
+        isActive: foodData?.isActive ?? true,
+        isOutOfStock: foodData?.isOutOfStock ?? false,
         variations: _variations,
       };
-      delete foodInput.__typename;
+
       await createFood({
         variables: {
           foodInput: foodInput,

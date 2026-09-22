@@ -1,12 +1,8 @@
 import React, { useContext, useEffect, useLayoutEffect, useState } from 'react'
-import { ActivityIndicator, Text, TouchableOpacity, View } from 'react-native'
+import { ActivityIndicator, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { SafeAreaView } from 'react-native-safe-area-context'
 import AsyncStorage from '@react-native-async-storage/async-storage'
-import {
-  CreditCard,
-  PaymentConfig,
-  PaymentResponse,
-  PaymentStatus
-} from 'react-native-moyasar-sdk'
+import { CreditCard, PaymentConfig, PaymentResponse, PaymentStatus } from 'react-native-moyasar-sdk'
 import { myOrders } from '../../apollo/queries'
 import gql from 'graphql-tag'
 import useEnvVars from '../../../environment'
@@ -17,6 +13,8 @@ import { theme } from '../../utils/themeColors'
 import analytics from '../../utils/analytics'
 import { useTranslation } from 'react-i18next'
 import { FlashMessage } from '../../ui/FlashMessage/FlashMessage'
+import { AntDesign, Feather } from '@expo/vector-icons'
+import { scale, verticalScale } from '../../utils/scaling'
 
 const MYORDERS = gql`
   ${myOrders}
@@ -32,6 +30,7 @@ function MoyasarCheckout(props) {
   const { t } = useTranslation()
   const themeContext = useContext(ThemeContext)
   const currentTheme = theme[themeContext.ThemeValue]
+  const screenStyles = styles(currentTheme)
   const [loading, setLoading] = useState(true)
   const [orderDetails, setOrderDetails] = useState(null)
   const [loadError, setLoadError] = useState(null)
@@ -178,12 +177,10 @@ function MoyasarCheckout(props) {
 
   if (isConfirmingOrder) {
     return (
-      <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', paddingHorizontal: 24, backgroundColor: currentTheme.themeBackground }}>
+      <SafeAreaView style={screenStyles.centerScreen}>
         <ActivityIndicator size='large' color={currentTheme.main} />
-        <Text style={{ marginTop: 20, fontSize: 22, fontWeight: '600', textAlign: 'center', color: currentTheme.fontMainColor }}>{confirmationTimedOut ? 'Payment submitted' : 'Confirming your order'}</Text>
-        <Text style={{ marginTop: 12, fontSize: 15, lineHeight: 22, textAlign: 'center', color: currentTheme.fontSecondColor }}>
-          {confirmationTimedOut ? "Your payment was submitted successfully. We're still waiting for the backend to confirm the order, so it may appear shortly in My Orders." : "Your card payment was submitted. We're waiting for backend confirmation before opening your order tracking screen."}
-        </Text>
+        <Text style={screenStyles.stateTitle}>{confirmationTimedOut ? 'Payment submitted' : 'Confirming your order'}</Text>
+        <Text style={screenStyles.stateText}>{confirmationTimedOut ? "Your payment was submitted successfully. We're still waiting for the backend to confirm the order, so it may appear shortly in My Orders." : "Your card payment was submitted. We're waiting for backend confirmation before opening your order tracking screen."}</Text>
         {confirmationTimedOut ? (
           <TouchableOpacity
             activeOpacity={0.8}
@@ -192,54 +189,221 @@ function MoyasarCheckout(props) {
                 routes: [{ name: 'Main' }]
               })
             }}
-            style={{ marginTop: 24, borderRadius: 999, backgroundColor: currentTheme.main, paddingHorizontal: 20, paddingVertical: 12 }}
+            style={screenStyles.stateButton}
           >
-            <Text style={{ color: currentTheme.fontWhite, fontWeight: '600' }}>Go to home</Text>
+            <Text style={screenStyles.stateButtonText}>Go to home</Text>
           </TouchableOpacity>
         ) : null}
-      </View>
+      </SafeAreaView>
     )
   }
 
   return (
-    <View style={{ flex: 1, backgroundColor: currentTheme.themeBackground }}>
+    <SafeAreaView style={screenStyles.container}>
       {loading ? (
-        <ActivityIndicator style={{ position: 'absolute', top: '50%', left: '50%' }} color={currentTheme.main} />
+        <View style={screenStyles.centerScreen}>
+          <ActivityIndicator size='large' color={currentTheme.main} />
+          <Text style={screenStyles.loadingText}>Preparing secure checkout</Text>
+        </View>
       ) : loadError || !orderDetails ? (
-        <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', paddingHorizontal: 24 }}>
-          <Text style={{ color: currentTheme.fontMainColor, textAlign: 'center' }}>{loadError || t('PaymentNotSuccessfull')}</Text>
+        <View style={screenStyles.centerScreen}>
+          <View style={screenStyles.errorIcon}>
+            <Feather name='alert-circle' size={scale(26)} color={currentTheme.textErrorColor} />
+          </View>
+          <Text style={screenStyles.stateTitle}>{t('PaymentNotSuccessfull')}</Text>
+          <Text style={screenStyles.stateText}>{loadError || t('PaymentNotSuccessfull')}</Text>
         </View>
       ) : (
-        <CreditCard
-          paymentConfig={
-            new PaymentConfig({
-              publishableApiKey: orderDetails.publishableKey,
-              amount: orderDetails.amount,
-              currency: orderDetails.currency,
-              description: orderDetails.description,
-              metadata: { orderId: _id }
-            })
-          }
-          onPaymentResult={handlePaymentResult}
-          style={{
-            container: { backgroundColor: currentTheme.themeBackground },
-            textInputs: {
-              borderColor: currentTheme.horizontalLine,
-              backgroundColor: currentTheme.cardBackground,
-              color: currentTheme.fontMainColor,
-              borderRadius: 10
-            },
-            textInputsPlaceholderColor: currentTheme.fontSecondColor,
-            paymentButton: { backgroundColor: currentTheme.main, borderRadius: 999 },
-            paymentButtonText: { color: currentTheme.fontWhite, fontWeight: '600' },
-            errorText: { color: currentTheme.textErrorColor },
-            activityIndicatorColor: currentTheme.fontWhite,
-            webviewActivityIndicatorColor: currentTheme.main
-          }}
-        />
+        <View style={screenStyles.content}>
+          <View style={screenStyles.summaryCard}>
+            <View style={screenStyles.brandRow}>
+              <View style={screenStyles.brandIcon}>
+                <AntDesign name='creditcard' size={scale(24)} color={currentTheme.main} />
+              </View>
+              <View style={screenStyles.brandCopy}>
+                <Text style={screenStyles.heading}>{t('moyasarCheckout')}</Text>
+                <Text style={screenStyles.subheading}>Your payment is processed securely by Moyasar.</Text>
+              </View>
+            </View>
+            <View style={screenStyles.amountRow}>
+              <Text style={screenStyles.amountLabel}>Amount due</Text>
+              <Text style={screenStyles.amountValue}>
+                {orderDetails.currency} {(Number(orderDetails.amount || 0) / 100).toFixed(2)}
+              </Text>
+            </View>
+            <View style={screenStyles.secureRow}>
+              <Feather name='shield' size={scale(15)} color={currentTheme.main} />
+              <Text style={screenStyles.secureText}>Encrypted card checkout</Text>
+            </View>
+          </View>
+
+          <View style={screenStyles.formCard}>
+            <CreditCard
+              paymentConfig={
+                new PaymentConfig({
+                  publishableApiKey: orderDetails.publishableKey,
+                  amount: orderDetails.amount,
+                  currency: orderDetails.currency,
+                  description: orderDetails.description,
+                  metadata: { orderId: _id }
+                })
+              }
+              onPaymentResult={handlePaymentResult}
+              style={{
+                container: screenStyles.sdkContainer,
+                textInputs: {
+                  borderColor: currentTheme.horizontalLine,
+                  backgroundColor: currentTheme.themeBackground,
+                  color: currentTheme.fontMainColor,
+                  borderRadius: 12
+                },
+                textInputsPlaceholderColor: currentTheme.fontSecondColor,
+                paymentButton: { backgroundColor: currentTheme.main, borderRadius: 999, height: verticalScale(50) },
+                paymentButtonText: { color: currentTheme.fontWhite, fontWeight: '700' },
+                errorText: { color: currentTheme.textErrorColor },
+                activityIndicatorColor: currentTheme.fontWhite,
+                webviewActivityIndicatorColor: currentTheme.main
+              }}
+            />
+          </View>
+        </View>
       )}
-    </View>
+    </SafeAreaView>
   )
 }
+
+const styles = (theme) =>
+  StyleSheet.create({
+    container: {
+      flex: 1,
+      backgroundColor: theme.themeBackground
+    },
+    content: {
+      flex: 1,
+      paddingHorizontal: scale(18),
+      paddingTop: verticalScale(18)
+    },
+    summaryCard: {
+      borderRadius: scale(18),
+      padding: scale(18),
+      backgroundColor: theme.cardBackground,
+      borderWidth: 1,
+      borderColor: theme.horizontalLine,
+      marginBottom: verticalScale(14)
+    },
+    brandRow: {
+      flexDirection: 'row',
+      alignItems: 'center'
+    },
+    brandIcon: {
+      width: scale(48),
+      height: scale(48),
+      borderRadius: scale(24),
+      alignItems: 'center',
+      justifyContent: 'center',
+      backgroundColor: theme.lightHorizontalLine
+    },
+    brandCopy: {
+      flex: 1,
+      marginLeft: scale(12)
+    },
+    heading: {
+      color: theme.fontMainColor,
+      fontSize: scale(22),
+      fontWeight: '700'
+    },
+    subheading: {
+      color: theme.fontSecondColor,
+      fontSize: scale(13),
+      lineHeight: scale(19),
+      marginTop: verticalScale(4)
+    },
+    amountRow: {
+      marginTop: verticalScale(18),
+      paddingTop: verticalScale(16),
+      borderTopWidth: 1,
+      borderTopColor: theme.horizontalLine,
+      flexDirection: 'row',
+      alignItems: 'center',
+      justifyContent: 'space-between'
+    },
+    amountLabel: {
+      color: theme.fontSecondColor,
+      fontSize: scale(13)
+    },
+    amountValue: {
+      color: theme.fontMainColor,
+      fontSize: scale(18),
+      fontWeight: '700'
+    },
+    secureRow: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      marginTop: verticalScale(12)
+    },
+    secureText: {
+      color: theme.fontSecondColor,
+      fontSize: scale(12),
+      marginLeft: scale(7)
+    },
+    formCard: {
+      flex: 1,
+      borderRadius: scale(18),
+      overflow: 'hidden',
+      backgroundColor: theme.cardBackground,
+      borderWidth: 1,
+      borderColor: theme.horizontalLine
+    },
+    sdkContainer: {
+      flex: 1,
+      backgroundColor: theme.cardBackground,
+      padding: scale(14)
+    },
+    centerScreen: {
+      flex: 1,
+      alignItems: 'center',
+      justifyContent: 'center',
+      paddingHorizontal: scale(24),
+      backgroundColor: theme.themeBackground
+    },
+    loadingText: {
+      marginTop: verticalScale(14),
+      color: theme.fontSecondColor,
+      fontSize: scale(14)
+    },
+    stateTitle: {
+      marginTop: verticalScale(20),
+      fontSize: scale(22),
+      fontWeight: '700',
+      textAlign: 'center',
+      color: theme.fontMainColor
+    },
+    stateText: {
+      marginTop: verticalScale(12),
+      fontSize: scale(15),
+      lineHeight: scale(22),
+      textAlign: 'center',
+      color: theme.fontSecondColor
+    },
+    stateButton: {
+      marginTop: verticalScale(24),
+      borderRadius: 999,
+      backgroundColor: theme.main,
+      paddingHorizontal: scale(22),
+      paddingVertical: verticalScale(12)
+    },
+    stateButtonText: {
+      color: theme.fontWhite,
+      fontWeight: '700'
+    },
+    errorIcon: {
+      width: scale(56),
+      height: scale(56),
+      borderRadius: scale(28),
+      alignItems: 'center',
+      justifyContent: 'center',
+      backgroundColor: theme.lightHorizontalLine
+    }
+  })
 
 export default MoyasarCheckout

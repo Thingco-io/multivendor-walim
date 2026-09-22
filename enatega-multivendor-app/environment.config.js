@@ -1,28 +1,28 @@
 const ENV_CONFIG = {
   development: {
-    GRAPHQL_URL: "https://rc56tdn4-8001.inc1.devtunnels.ms/graphql",
-      WS_GRAPHQL_URL: "wss://rc56tdn4-8001.inc1.devtunnels.ms/graphql",
-    SERVER_URL: 'https://rc56tdn4-8001.inc1.devtunnels.ms/graphql',
-    SERVER_REST_URL: 'https://rc56tdn4-8001.inc1.devtunnels.ms/',
-    WEB_URL: 'https://rc56tdn4-3003.inc1.devtunnels.ms/',
+    GRAPHQL_URL: "https://server.thingco.io/graphql",
+      WS_GRAPHQL_URL: "wss://server.thingco.io/graphql",
+    SERVER_URL: 'https://server.thingco.io/graphql',
+    SERVER_REST_URL: 'https://server.thingco.io/',
+    WEB_URL: 'https://server.thingco.io/',
     GOOGLE_MAPS_API_KEY: 'AIzaSyCcm7_Wd7uvmC9YnYLu2JHGWPt6z1MaL1E',
     CLARITY_ENABLED: false
   },
   staging: {
-   GRAPHQL_URL: "https://rc56tdn4-8001.inc1.devtunnels.ms/graphql",
-      WS_GRAPHQL_URL: "wss://rc56tdn4-8001.inc1.devtunnels.ms/graphql",
-    SERVER_URL: 'https://rc56tdn4-8001.inc1.devtunnels.ms/graphql',
-    SERVER_REST_URL: 'https://rc56tdn4-8001.inc1.devtunnels.ms/',
-    WEB_URL: 'https://rc56tdn4-3003.inc1.devtunnels.ms/',
+   GRAPHQL_URL: "https://server.thingco.io/graphql",
+      WS_GRAPHQL_URL: "wss://server.thingco.io/graphql",
+    SERVER_URL: 'https://server.thingco.io/graphql',
+    SERVER_REST_URL: 'https://server.thingco.io/',
+    WEB_URL: 'https://server.thingco.io/',
     GOOGLE_MAPS_API_KEY: 'AIzaSyCcm7_Wd7uvmC9YnYLu2JHGWPt6z1MaL1E',
     CLARITY_ENABLED: false
   },
   production: {
-   GRAPHQL_URL: "https://rc56tdn4-8001.inc1.devtunnels.ms/graphql",
-      WS_GRAPHQL_URL: "wss://rc56tdn4-8001.inc1.devtunnels.ms/graphql",
-    SERVER_URL: 'https://rc56tdn4-8001.inc1.devtunnels.ms/graphql',
-    SERVER_REST_URL: 'https://rc56tdn4-8001.inc1.devtunnels.ms/',
-    WEB_URL: 'https://rc56tdn4-3003.inc1.devtunnels.ms/',
+   GRAPHQL_URL: "https://server.thingco.io/graphql",
+      WS_GRAPHQL_URL: "wss://server.thingco.io/graphql",
+    SERVER_URL: 'https://server.thingco.io/graphql',
+    SERVER_REST_URL: 'https://server.thingco.io/',
+    WEB_URL: 'https://server.thingco.io/',
     GOOGLE_MAPS_API_KEY: 'AIzaSyCcm7_Wd7uvmC9YnYLu2JHGWPt6z1MaL1E',
     CLARITY_ENABLED: false
   }
