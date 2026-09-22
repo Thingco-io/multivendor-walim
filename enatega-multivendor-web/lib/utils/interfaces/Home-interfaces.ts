@@ -20,7 +20,9 @@ export interface buttonProps{
     image:string | StaticImageData ,
     middle?:boolean,
     height?:string,
-    link?:string
+    link?:string,
+    fit?: "cover" | "contain",
+    sizes?: string
     }
 
   

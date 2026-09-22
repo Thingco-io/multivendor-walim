@@ -20,6 +20,7 @@ const GrowBussiness:React.FC = () => {
         subText={t('MoveableCardHomeScreen.subText3')}
         middle={true}
         button={growButon}
+        sizes="(max-width: 700px) 100vw, 100vw"
         />
     </div>
   )

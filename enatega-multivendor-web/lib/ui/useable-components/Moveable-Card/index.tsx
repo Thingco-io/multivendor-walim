@@ -11,6 +11,8 @@ const MoveableCard: React.FC<MoveableProps> = ({
   image,
   middle = false,
   height = "600px",
+  fit = "cover",
+  sizes = "(max-width: 700px) 100vw, 50vw",
 }) => {
   const [responsiveHeight, setResponsiveHeight] = useState(height);
 
@@ -31,7 +33,9 @@ const MoveableCard: React.FC<MoveableProps> = ({
 
   return (
     <div
-      className={`${styles.cardContainer} bg-green-300 dark:bg-gray-800 rounded-3xl cursor-pointer`}
+      className={`${styles.cardContainer} ${
+        fit === "contain" ? "bg-white dark:bg-gray-800" : "bg-green-300 dark:bg-gray-800"
+      } rounded-3xl cursor-pointer`}
       style={{ height: responsiveHeight }}
     >
       {/* Image container */}
@@ -42,8 +46,9 @@ const MoveableCard: React.FC<MoveableProps> = ({
         }
         alt="Main Image"
         fill
-        sizes="(max-width: 700px) 100vw, 600px"
+        sizes={sizes}
         className={`${styles.imageContainer} c`}
+        style={{ objectFit: fit }}
       />
 
       {/* Text container */}
