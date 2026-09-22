@@ -10,8 +10,8 @@ const getEnvVars = (env = Updates.channel) => {
   }
   if (!__DEV__) {
     return {
-      GRAPHQL_URL: "https://rc56tdn4-8001.inc1.devtunnels.ms/graphql",
-      WS_GRAPHQL_URL: "wss://rc56tdn4-8001.inc1.devtunnels.ms/graphql",
+      GRAPHQL_URL: "https://server.thingco.io/graphql",
+      WS_GRAPHQL_URL: "wss://server.thingco.io/graphql",
       SENTRY_DSN:
         configuration?.riderAppSentryUrl ??
         "https://6489fc549ffef8174011164edea79bf2@o4511706525794304.ingest.de.sentry.io/4511733049458768",
@@ -21,8 +21,8 @@ const getEnvVars = (env = Updates.channel) => {
   }
 
   return {
-     GRAPHQL_URL: "https://rc56tdn4-8001.inc1.devtunnels.ms/graphql",
-      WS_GRAPHQL_URL: "wss://rc56tdn4-8001.inc1.devtunnels.ms/graphql",
+     GRAPHQL_URL: "https://server.thingco.io/graphql",
+      WS_GRAPHQL_URL: "wss://server.thingco.io/graphql",
     SENTRY_DSN:
       configuration?.riderAppSentryUrl ??
        "https://6489fc549ffef8174011164edea79bf2@o4511706525794304.ingest.de.sentry.io/4511733049458768",

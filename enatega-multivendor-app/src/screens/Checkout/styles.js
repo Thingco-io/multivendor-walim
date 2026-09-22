@@ -168,8 +168,7 @@ const styles = (props = null) =>
 
     buttonContainer: {
       ...alignment.PLmedium,
-      ...alignment.PRmedium,
-      ...alignment.PBlarge
+      ...alignment.PRmedium
     },
     changeBtn: {
       backgroundColor: props !== null ? props?.main : 'gray',
