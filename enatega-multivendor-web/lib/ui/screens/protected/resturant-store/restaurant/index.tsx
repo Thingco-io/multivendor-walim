@@ -785,27 +785,35 @@ export default function RestaurantDetailsScreen() {
                           />
                         </div>
 
-                        {/* Add Button */}
+                        {/* Add Button / Quantity Pill */}
                         <div
                           className={`${direction === "rtl" ? "left-2" : "right-2"} absolute top-2`}
                         >
-                          {cartQuantity > 0 && (
-                            <span
-                              aria-label={`${cartQuantity} ${meal.title} added to cart`}
-                              className="absolute -top-2 -right-2 z-10 min-w-5 h-5 px-1 rounded-full bg-gray-900 text-white text-xs font-bold flex items-center justify-center"
-                            >
-                              {cartQuantity}
-                            </span>
-                          )}
                           <button
-                            className="bg-secondary-color rounded-full shadow-md w-6 h-6 flex items-center justify-center"
+                            aria-label={
+                              cartQuantity > 0
+                                ? `${cartQuantity} ${meal.title} in cart, add another`
+                                : `Add ${meal.title} to cart`
+                            }
+                            className={`bg-secondary-color text-white rounded-full shadow-md flex items-center justify-center gap-1 h-6 transition-[width,padding] duration-200 ${
+                              cartQuantity > 0 ? "min-w-6 px-2" : "w-6"
+                            }`}
                             onClick={(e) => {
                               e.stopPropagation(); // Prevent triggering parent onClick
                               handleRestaurantClick(meal);
                             }}
                             type="button"
                           >
-                            <FontAwesomeIcon icon={faPlus} color="white" />
+                            {cartQuantity > 0 && (
+                              <span className="text-xs font-bold leading-none">
+                                {cartQuantity}
+                              </span>
+                            )}
+                            <FontAwesomeIcon
+                              icon={faPlus}
+                              color="white"
+                              className="text-[10px]"
+                            />
                           </button>
                         </div>
 

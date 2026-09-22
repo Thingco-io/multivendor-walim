@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import { ProfileLogoSVG } from '@/lib/utils/assets/svgs/profile';
+import WalimLogo from '@/lib/utils/assets/svgs/walim-logo';
 import { IInfoItemProps } from '@/lib/utils/interfaces/profile/restaurant.profile.interface';
 import { Avatar } from 'primereact/avatar';
 import { ProfileContext } from '@/lib/context/restaurant/profile.context';
@@ -43,7 +43,7 @@ const RestaurantMain: React.FC = () => {
     <div className="flex items-center justify-center mt-8">
       <div className="bg-white dark:bg-dark-950 p-8 w-full border-2 border-dotted dark:border-dark-600 rounded border-inherit">
         <div className="flex items-center mb-6">
-          <ProfileLogoSVG width="55" height="55" strokeColor="#1E1E1E" />
+          <WalimLogo className="h-[55px] w-[55px]" />
           <div className="ml-2">
             <h1 className="text-xs text-gray-500 dark:text-white">
               {t('Store Name')}
