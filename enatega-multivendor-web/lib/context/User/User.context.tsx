@@ -172,7 +172,7 @@ export interface UserContextType {
         _id: string;
       }>;
     }>,
-    specialInstructions?: string
+    specialInstructions?: string,
   ) => Promise<void>;
   checkItemCart: (itemId: string) => {
     exist: boolean;
@@ -188,7 +188,7 @@ export interface UserContextType {
   calculateSubtotal: () => string;
   transformCartWithFoodInfo: (
     cartItems: CartItem[],
-    foodsData: IRestaurant
+    foodsData: IRestaurant,
   ) => CartItem[];
   fetchProfile: LazyQueryExecFunction<any, OperationVariables>;
   setCart: React.Dispatch<React.SetStateAction<CartItem[]>>;
@@ -200,7 +200,7 @@ export const UserProvider: React.FC<{ children: ReactNode }> = (props) => {
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const client = useApolloClient();
   const [token, setToken] = useState<string | null>(
-    typeof window !== "undefined" ? localStorage.getItem("token") : null
+    typeof window !== "undefined" ? localStorage.getItem("token") : null,
   );
   const [cart, setCart] = useState<CartItem[]>([]);
   const [restaurant, setRestaurant] = useState<string | null>(null);
@@ -266,7 +266,7 @@ export const UserProvider: React.FC<{ children: ReactNode }> = (props) => {
 
         // Find the variation
         const variationItem = foodItem.variations.find(
-          (v: IVariation) => v._id === cartItem.variation._id
+          (v: IVariation) => v._id === cartItem.variation._id,
         );
         if (!variationItem) return cartItem;
 
@@ -288,7 +288,7 @@ export const UserProvider: React.FC<{ children: ReactNode }> = (props) => {
 
             addon.options.forEach((opt) => {
               const optionItem = options.find(
-                (o: IOption) => o._id === opt._id
+                (o: IOption) => o._id === opt._id,
               );
               if (!optionItem) return;
 
@@ -310,24 +310,27 @@ export const UserProvider: React.FC<{ children: ReactNode }> = (props) => {
         };
       });
     },
-    []
+    [],
   );
 
-  const onInit = useCallback(async (isSubscribed: boolean) => {
-    if (!isSubscribed) return;
+  const onInit = useCallback(
+    async (isSubscribed: boolean) => {
+      if (!isSubscribed) return;
 
-    setIsLoading(true);
+      setIsLoading(true);
 
-    const _token = localStorage.getItem("token") || null;
-    setToken(_token);
+      const _token = localStorage.getItem("token") || null;
+      setToken(_token);
 
-    if (_token) {
-      await fetchProfile();
-      await fetchOrders();
-    }
+      if (_token) {
+        await fetchProfile();
+        await fetchOrders();
+      }
 
-    setIsLoading(false);
-  }, [fetchProfile, fetchOrders]);
+      setIsLoading(false);
+    },
+    [fetchProfile, fetchOrders],
+  );
 
   // Define setCartRestaurant before it's used in dependencies
   const setCartRestaurant = useCallback(async (id: string) => {
@@ -372,8 +375,6 @@ export const UserProvider: React.FC<{ children: ReactNode }> = (props) => {
     // Important: Include token as a dependency to refetch when it changes
   }, [token, onInit]);
 
-
-
   function onProfileCompleted(data: IProfileResponse) {
     if (data.profile) {
       updateNotificationToken();
@@ -392,7 +393,7 @@ export const UserProvider: React.FC<{ children: ReactNode }> = (props) => {
       }
       cb();
     },
-    []
+    [],
   );
 
   const logout = useCallback(async () => {
@@ -421,7 +422,7 @@ export const UserProvider: React.FC<{ children: ReactNode }> = (props) => {
           if (subscriptionData.data.orderStatusChanged.origin === "new") {
             if (
               ((prev?.orders as IOrder[]) || ([] as IOrder[]))?.findIndex(
-                (o: IOrder) => o._id === _id
+                (o: IOrder) => o._id === _id,
               ) > -1
             )
               return prev;
@@ -567,21 +568,24 @@ export const UserProvider: React.FC<{ children: ReactNode }> = (props) => {
 
   const checkItemCart = useCallback(
     (itemId: string) => {
-      const cartIndex = cart.findIndex((c) => c._id === itemId);
-      if (cartIndex < 0) {
+      const matchingItems = cart.filter((c) => c._id === itemId);
+      if (matchingItems.length === 0) {
         return {
           exist: false,
           quantity: 0,
         };
-      } else {
-        return {
-          exist: true,
-          quantity: cart[cartIndex].quantity,
-          key: cart[cartIndex].key,
-        };
       }
+
+      return {
+        exist: true,
+        quantity: matchingItems.reduce(
+          (total, item) => total + item.quantity,
+          0,
+        ),
+        key: matchingItems[0].key,
+      };
     },
-    [cart]
+    [cart],
   );
 
   const numberOfCartItems = useCallback(() => {
@@ -602,7 +606,7 @@ export const UserProvider: React.FC<{ children: ReactNode }> = (props) => {
           _id: string;
         }>;
       }> = [],
-      specialInstructions: string = ""
+      specialInstructions: string = "",
     ) => {
       // Check if we need to clear the cart (different restaurant)
       const needsClear = Boolean(restaurantId && restaurant !== restaurantId);
@@ -639,7 +643,7 @@ export const UserProvider: React.FC<{ children: ReactNode }> = (props) => {
         return updatedCart;
       });
     },
-    [restaurant, setCartRestaurant]
+    [restaurant, setCartRestaurant],
   );
 
   const updateCart = useCallback(
@@ -654,7 +658,7 @@ export const UserProvider: React.FC<{ children: ReactNode }> = (props) => {
         localStorage.setItem("cartItems", JSON.stringify(updatedCart));
       }
     },
-    [cart]
+    [cart],
   );
 
   const updateNotificationToken = useCallback(() => {
@@ -691,7 +695,7 @@ export const UserProvider: React.FC<{ children: ReactNode }> = (props) => {
         const currentItem = updatedCart[cartIndex];
         const currentQuantity = currentItem.quantity;
         console.log(
-          `[UserContext] Current quantity for ${key}: ${currentQuantity}`
+          `[UserContext] Current quantity for ${key}: ${currentQuantity}`,
         );
 
         // For decrement
@@ -730,21 +734,25 @@ export const UserProvider: React.FC<{ children: ReactNode }> = (props) => {
         return updatedCart;
       });
     },
-    []
+    [],
   );
 
   const removeItem = useCallback(
     async (key: string) => {
       await deleteItem(key);
     },
-    [deleteItem]
+    [deleteItem],
   );
 
   const calculateSubtotal = useCallback(() => {
     return cart
       .reduce((total, item) => {
-        const priceRaw = (item.variation as { price?: number | string })?.price ?? item.price ?? 0;
-        const price = typeof priceRaw === 'string' ? parseFloat(priceRaw) : priceRaw;
+        const priceRaw =
+          (item.variation as { price?: number | string })?.price ??
+          item.price ??
+          0;
+        const price =
+          typeof priceRaw === "string" ? parseFloat(priceRaw) : priceRaw;
         const quantity = item.quantity ?? 0;
         return total + price * quantity;
       }, 0)
@@ -817,14 +825,8 @@ export const UserProvider: React.FC<{ children: ReactNode }> = (props) => {
       calculateSubtotal,
       transformCartWithFoodInfo,
       setCart,
-    ]
+    ],
   );
-
-
-
-
-
-
 
   return (
     <UserContext.Provider value={contextValue}>

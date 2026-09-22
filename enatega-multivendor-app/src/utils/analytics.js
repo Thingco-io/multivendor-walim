@@ -53,7 +53,13 @@ const Analytics = () => {
       if (isInitialized || !apiKey /*  || trackingStatus !== 'granted' */) {
         return
       }
-      amplitude.init(apiKey)
+      amplitude.init(apiKey, undefined, {
+        // React Native does not need browser cookies for Amplitude sessions.
+        // Disabling them prevents the SDK cookie warning from reaching Expo's
+        // development error overlay.
+        disableCookies: true,
+        logLevel: amplitude.Types.LogLevel.None
+      })
       isInitialized = true
     } catch (error) {
       console.log('Amplitude init error', error)

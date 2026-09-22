@@ -38,12 +38,6 @@ const AnimatedText = Animated.createAnimatedComponent(Text)
 const AnimatedTouchable = Animated.createAnimatedComponent(TouchableOpacity)
 
 const { height } = Dimensions.get('screen')
-const TOP_BAR_HEIGHT = height * 0.05
-const CATEGORY_BAR_HEIGHT = scale(56)
-const HEADER_MAX_HEIGHT =
-  Platform.OS === 'android' ? height * 0.57 : height * 0.54
-const HEADER_MIN_HEIGHT = TOP_BAR_HEIGHT + CATEGORY_BAR_HEIGHT
-const SCROLL_RANGE = HEADER_MAX_HEIGHT - HEADER_MIN_HEIGHT
 
 function ImageTextCenterHeader(props, ref) {
   const { t, i18n } = useTranslation()
@@ -56,6 +50,15 @@ function ImageTextCenterHeader(props, ref) {
     ...theme[themeContext.ThemeValue]
   }
   const topInset = props?.topInset ?? 0
+  // These come from Restaurant.js, which computes them from the real safe-area
+  // top inset so the header reserves enough room on devices with a tall inset
+  // (e.g. Dynamic Island). Fall back to the old, inset-unaware formula only if
+  // a caller doesn't pass them.
+  const TOP_BAR_HEIGHT = props?.topBarHeight ?? height * 0.05
+  const HEADER_MAX_HEIGHT =
+    props?.headerMaxHeight ?? (Platform.OS === 'android' ? height * 0.57 : height * 0.54)
+  const HEADER_MIN_HEIGHT = props?.headerMinHeight ?? TOP_BAR_HEIGHT + scale(56)
+  const SCROLL_RANGE = props?.scrollRange ?? HEADER_MAX_HEIGHT - HEADER_MIN_HEIGHT
   const { location } = useContext(LocationContext)
   const configuration = useContext(ConfigurationContext)
   const newheaderColor = currentTheme.backgroundColor
@@ -141,7 +144,7 @@ function ImageTextCenterHeader(props, ref) {
     return {
       opacity: interpolate(
         translationY.value,
-        [0, height * 0.05, SCROLL_RANGE / 2],
+        [0, TOP_BAR_HEIGHT, SCROLL_RANGE / 2],
         [1, 0.8, 0],
         Extrapolation.CLAMP
       )
@@ -537,11 +540,12 @@ function ImageTextCenterHeader(props, ref) {
               inverted={currentTheme.isRTL ? true : false}
               renderItem={({ item, index }) => (
                 <View
-                  style={
+                  style={[
+                    styles(currentTheme).navItem,
                     props?.selectedLabel === index
                       ? styles(currentTheme).activeHeader
                       : null
-                  }
+                  ]}
                 >
                   <RectButton
                     rippleColor={currentTheme.rippleColor}

@@ -152,23 +152,39 @@ const styles = (props = null) =>
       marginHorizontal: 15
     },
     flatListStyle: {
-      height: '100%',
+      // Fixed to the category bar's own height instead of '100%'. '100%' was
+      // resolving against the header's large animated container height (not
+      // the visible tab row), which stretched each item — and the active
+      // pill's background with it — into a huge circle overlapping the
+      // content below the tab bar.
+      height: scale(56),
       width: '100%',
       backgroundColor: props != null ? props.themeBackground : 'white',
       zIndex: 2
     },
     headerContainer: {
-      height: '100%',
-      width: '100%',
+      // No height/width: '100%' here on purpose. Inside a horizontal FlatList
+      // item, a percentage height resolves against (and a default 'stretch'
+      // cross-axis falls back to) the list's own box, not the visible tab
+      // row — that's what was inflating the selected pill into a huge blob.
+      // Sizing this from its own padding instead makes it independent of any
+      // ancestor's height.
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'center',
+      paddingVertical: scale(10),
       ...alignment.PLlarge,
       ...alignment.PRlarge
     },
+    navItem: {
+      // Opts out of the FlatList row's default cross-axis 'stretch', so the
+      // pill's height always comes from headerContainer's own padding.
+      alignSelf: 'center'
+    },
     activeHeader: {
       backgroundColor: props != null ? props.newButtonBackground : '#FFE2D0',
-      borderRadius: scale(50),
+      borderRadius: scale(22),
+      justifyContent: 'center'
     },
     heading: {
       fontWeight: 'bold'
@@ -178,6 +194,7 @@ const styles = (props = null) =>
       top: 0,
       width: '100%',
       height: '100%',
+      overflow: 'hidden',
     },
     headerTitle: {
       ...textStyles.H5,

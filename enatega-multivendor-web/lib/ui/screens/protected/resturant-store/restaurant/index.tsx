@@ -43,13 +43,14 @@ import { Dialog } from "primereact/dialog";
 import Loader from "@/app/(localized)/mapview/[slug]/components/Loader";
 import { motion } from "framer-motion";
 import CustomDialog from "@/lib/ui/useable-components/custom-dialog";
-import Image from '@/lib/ui/useable-components/safe-image';
+import Image from "@/lib/ui/useable-components/safe-image";
 import { useTranslations } from "next-intl";
 
 export default function RestaurantDetailsScreen() {
   // Access the UserContext via our custom hook
   const {
     cart,
+    checkItemCart,
     transformCartWithFoodInfo,
     updateCart,
     restaurant: cartRestaurant,
@@ -740,86 +741,101 @@ export default function RestaurantDetailsScreen() {
                 </h2>
 
                 <div className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
-                  {category.foods.map((meal: IFood, mealIndex) => (
-                    <div
-                      key={mealIndex}
-                      className="flex gap-4 rounded-lg border border-gray-300 dark:border-gray-600 shadow-sm bg-white dark:bg-gray-800 p-3 relative cursor-pointer transition-transform duration-300 hover:scale-105 hover:shadow-lg"
-                      onClick={() => handleRestaurantClick(meal)}
-                    >
-                      {/* Text Content */}
-                      <div className="flex-grow text-left md:text-left space-y-2">
-                        <div className="flex flex-col lg:flex-row justify-between flex-wrap">
-                          <h3 className="text-gray-900 dark:text-gray-100  text-lg font-semibold font-inter">
-                            {meal.title}
-                          </h3>
-                          {meal.isOutOfStock && (
-                            <span className="text-red-500">
-                              {t("out_of_stock_label")}
+                  {category.foods.map((meal: IFood, mealIndex) => {
+                    const cartQuantity = checkItemCart(meal._id).quantity;
+
+                    return (
+                      <div
+                        key={mealIndex}
+                        className="flex gap-4 rounded-lg border border-gray-300 dark:border-gray-600 shadow-sm bg-white dark:bg-gray-800 p-3 relative cursor-pointer transition-transform duration-300 hover:scale-105 hover:shadow-lg"
+                        onClick={() => handleRestaurantClick(meal)}
+                      >
+                        {/* Text Content */}
+                        <div className="flex-grow text-left md:text-left space-y-2">
+                          <div className="flex flex-col lg:flex-row justify-between flex-wrap">
+                            <h3 className="text-gray-900 dark:text-gray-100  text-lg font-semibold font-inter">
+                              {meal.title}
+                            </h3>
+                            {meal.isOutOfStock && (
+                              <span className="text-red-500">
+                                {t("out_of_stock_label")}
+                              </span>
+                            )}
+                          </div>
+
+                          <p className="text-gray-500 text-sm dark:text-gray-400 line-clamp-2 hover:line-clamp-none">
+                            {meal.description}
+                          </p>
+
+                          <div className="flex items-center gap-2">
+                            <span className="text-secondary-color dark:text-sky-400 text-lg font-semibold">
+                              {CURRENCY_SYMBOL} {meal.variations[0].price}
+                            </span>
+                          </div>
+                        </div>
+
+                        {/* Image */}
+                        <div className="flex-shrink-0 w-24 h-24 md:w-28 md:h-28">
+                          <Image
+                            alt={meal.title}
+                            className="w-full h-full rounded-md object-cover mx-auto md:mx-0"
+                            src={meal.image}
+                            width={112}
+                            height={112}
+                          />
+                        </div>
+
+                        {/* Add Button */}
+                        <div
+                          className={`${direction === "rtl" ? "left-2" : "right-2"} absolute top-2`}
+                        >
+                          {cartQuantity > 0 && (
+                            <span
+                              aria-label={`${cartQuantity} ${meal.title} added to cart`}
+                              className="absolute -top-2 -right-2 z-10 min-w-5 h-5 px-1 rounded-full bg-gray-900 text-white text-xs font-bold flex items-center justify-center"
+                            >
+                              {cartQuantity}
                             </span>
                           )}
+                          <button
+                            className="bg-secondary-color rounded-full shadow-md w-6 h-6 flex items-center justify-center"
+                            onClick={(e) => {
+                              e.stopPropagation(); // Prevent triggering parent onClick
+                              handleRestaurantClick(meal);
+                            }}
+                            type="button"
+                          >
+                            <FontAwesomeIcon icon={faPlus} color="white" />
+                          </button>
                         </div>
 
-                        <p className="text-gray-500 text-sm dark:text-gray-400 line-clamp-2 hover:line-clamp-none">
-                          {meal.description}
-                        </p>
-
-                        <div className="flex items-center gap-2">
-                          <span className="text-secondary-color dark:text-sky-400 text-lg font-semibold">
-                            {CURRENCY_SYMBOL} {meal.variations[0].price}
-                          </span>
-                        </div>
-                      </div>
-
-                      {/* Image */}
-                      <div className="flex-shrink-0 w-24 h-24 md:w-28 md:h-28">
-                        <Image
-                          alt={meal.title}
-                          className="w-full h-full rounded-md object-cover mx-auto md:mx-0"
-                          src={meal.image}
-                          width={112}
-                          height={112}
-                        />
-                      </div>
-
-                      {/* Add Button */}
-                      <div
-                        className={`${direction === "rtl" ? "left-2" : "right-2"} absolute top-2`}
-                      >
-                        <button
-                          className="bg-secondary-color rounded-full shadow-md w-6 h-6 flex items-center justify-center"
-                          onClick={(e) => {
-                            e.stopPropagation(); // Prevent triggering parent onClick
-                            handleRestaurantClick(meal);
-                          }}
-                          type="button"
+                        {/* create a modal that will be show that this restaurant is closed do want to see menu or want to close if click on the see menu then will move to the next page other wise modal will be closed */}
+                        <CustomDialog
+                          className="max-w-[300px]"
+                          visible={
+                            isModalOpen.value &&
+                            isModalOpen.id === meal?._id?.toString()
+                          }
+                          onHide={() =>
+                            handleUpdateIsModalOpen(
+                              false,
+                              meal?._id?.toString(),
+                            )
+                          }
                         >
-                          <FontAwesomeIcon icon={faPlus} color="white" />
-                        </button>
+                          <div className="text-center pb-10 pt-10">
+                            <p className="text-lg font-bold pb-3 dark:text-gray-100">
+                              {t("restaurant_is_closed")}
+                            </p>
+                            <p className="text-sm dark:text-gray-300">
+                              {t("cannot_order_food_item_now")}
+                              <br></br> {t("please_try_again_later")}
+                            </p>
+                          </div>
+                        </CustomDialog>
                       </div>
-
-                      {/* create a modal that will be show that this restaurant is closed do want to see menu or want to close if click on the see menu then will move to the next page other wise modal will be closed */}
-                      <CustomDialog
-                        className="max-w-[300px]"
-                        visible={
-                          isModalOpen.value &&
-                          isModalOpen.id === meal?._id?.toString()
-                        }
-                        onHide={() =>
-                          handleUpdateIsModalOpen(false, meal?._id?.toString())
-                        }
-                      >
-                        <div className="text-center pb-10 pt-10">
-                          <p className="text-lg font-bold pb-3 dark:text-gray-100">
-                            {t("restaurant_is_closed")}
-                          </p>
-                          <p className="text-sm dark:text-gray-300">
-                            {t("cannot_order_food_item_now")}
-                            <br></br> {t("please_try_again_later")}
-                          </p>
-                        </div>
-                      </CustomDialog>
-                    </div>
-                  ))}
+                    );
+                  })}
                 </div>
               </div>
             );
