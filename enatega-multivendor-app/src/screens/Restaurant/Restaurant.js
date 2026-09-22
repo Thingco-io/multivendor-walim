@@ -34,12 +34,7 @@ const { height } = Dimensions.get('screen')
 
 // Animated Section List component
 const AnimatedSectionList = Animated.createAnimatedComponent(SectionList)
-const TOP_BAR_HEIGHT = height * 0.05
 const CATEGORY_BAR_HEIGHT = scale(56)
-const HEADER_MAX_HEIGHT = Platform.OS === 'android' ? height * 0.57 : height * 0.54
-const HEADER_MIN_HEIGHT = TOP_BAR_HEIGHT + CATEGORY_BAR_HEIGHT
-const SCROLL_RANGE = HEADER_MAX_HEIGHT - HEADER_MIN_HEIGHT
-const SNAP_THRESHOLD = SCROLL_RANGE / 2
 
 const POPULAR_ITEMS = gql`
   ${popularItems}
@@ -54,6 +49,37 @@ function Restaurant(props) {
   const Analytics = analytics()
   const { t, i18n } = useTranslation()
   const insets = useSafeAreaInsets()
+
+  // Header height math, keyed off the device's real safe-area top inset (status
+  // bar / notch / Dynamic Island) instead of a flat percentage of screen height.
+  // The nav row inside the header grows by `insets.top` (it gets paddingTop:
+  // topInset), so TOP_BAR_HEIGHT must grow by the same amount to keep that room
+  // reserved when the header is collapsed. HEADER_MAX_HEIGHT grows by double
+  // that so the expanded content area (headerMaxHeight - topBarHeight) also
+  // gains the extra room the taller nav row eats into — otherwise devices with
+  // a large inset (e.g. Dynamic Island iPhones) don't leave enough space for
+  // the restaurant info block, which then overlaps the category tab bar below it.
+  const headerLayout = useMemo(() => {
+    const topBarHeight = height * 0.05 + insets.top
+    const headerMaxHeight = (Platform.OS === 'android' ? height * 0.57 : height * 0.54) + insets.top * 2
+    const headerMinHeight = topBarHeight + CATEGORY_BAR_HEIGHT
+    const scrollRange = headerMaxHeight - headerMinHeight
+    return {
+      topBarHeight,
+      headerMaxHeight,
+      headerMinHeight,
+      scrollRange,
+      snapThreshold: scrollRange / 2
+    }
+  }, [insets.top])
+  const {
+    topBarHeight: TOP_BAR_HEIGHT,
+    headerMaxHeight: HEADER_MAX_HEIGHT,
+    headerMinHeight: HEADER_MIN_HEIGHT,
+    scrollRange: SCROLL_RANGE,
+    snapThreshold: SNAP_THRESHOLD
+  } = headerLayout
+
   const scrollRef = useRef(null)
   const flatListRef = useRef(null)
   const navigation = useNavigation()
@@ -428,7 +454,7 @@ function Restaurant(props) {
   if (loading) {
     return (
       <View style={[styles(currentTheme).flex]}>
-        <ImageHeader iconColor={iconColor} iconSize={iconSize} iconBackColor={iconBackColor} iconRadius={iconRadius} iconTouchWidth={iconTouchWidth} iconTouchHeight={iconTouchHeight} restaurantName={propsData?.name ?? data?.restaurant?.name} restaurantId={propsData?._id} restaurantImage={propsData?.image ?? data?.restaurant?.image} restaurant={null} topaBarData={[]} loading={loading} minimumOrder={propsData?.minimumOrder ?? data?.restaurant?.minimumOrder} tax={propsData?.tax ?? data?.restaurant?.tax} updatedDeals={[]} searchOpen={searchOpen} showSearchResults={showSearchResults} setSearch={setSearch} search={search} searchHandler={searchHandler} searchPopupHandler={searchPopupHandler} translationY={translationY} topInset={insets.top} />
+        <ImageHeader iconColor={iconColor} iconSize={iconSize} iconBackColor={iconBackColor} iconRadius={iconRadius} iconTouchWidth={iconTouchWidth} iconTouchHeight={iconTouchHeight} restaurantName={propsData?.name ?? data?.restaurant?.name} restaurantId={propsData?._id} restaurantImage={propsData?.image ?? data?.restaurant?.image} restaurant={null} topaBarData={[]} loading={loading} minimumOrder={propsData?.minimumOrder ?? data?.restaurant?.minimumOrder} tax={propsData?.tax ?? data?.restaurant?.tax} updatedDeals={[]} searchOpen={searchOpen} showSearchResults={showSearchResults} setSearch={setSearch} search={search} searchHandler={searchHandler} searchPopupHandler={searchPopupHandler} translationY={translationY} topInset={insets.top} topBarHeight={TOP_BAR_HEIGHT} headerMaxHeight={HEADER_MAX_HEIGHT} headerMinHeight={HEADER_MIN_HEIGHT} scrollRange={SCROLL_RANGE} />
 
         <View
           style={[
@@ -466,6 +492,10 @@ function Restaurant(props) {
           <ImageHeader
             ref={flatListRef}
             topInset={insets.top}
+            topBarHeight={TOP_BAR_HEIGHT}
+            headerMaxHeight={HEADER_MAX_HEIGHT}
+            headerMinHeight={HEADER_MIN_HEIGHT}
+            scrollRange={SCROLL_RANGE}
             iconColor={iconColor}
             iconSize={iconSize}
             iconBackColor={iconBackColor}
