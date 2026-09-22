@@ -138,7 +138,12 @@ export default function CategoryAddForm({
   const [createCategory, { loading: mutationLoading }] = useMutation(
     category ? EDIT_CATEGORY : CREATE_CATEGORY,
     {
-      refetchQueries: 'active',
+      refetchQueries: [
+        {
+          query: GET_CATEGORY_BY_RESTAURANT_ID,
+          variables: { id: restaurantId },
+        },
+      ],
       awaitRefetchQueries: true,
       onCompleted: () => {
         showToast({
