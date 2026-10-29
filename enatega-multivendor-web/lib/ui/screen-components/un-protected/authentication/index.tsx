@@ -41,6 +41,7 @@ export default function AuthModal({
   // States
   const [emailOtp, setEmailOtp] = useState("");
   const [phoneOtp, setPhoneOtp] = useState("");
+  const [resetToken, setResetToken] = useState("");
   const [formData, setFormData] = useState<IAuthFormData>({
     email: "",
     password: "",
@@ -56,6 +57,7 @@ export default function AuthModal({
         name: "",
         phone: "",
       });
+      setResetToken("");
     }
   }, [isAuthModalVisible]);
   // get the RTL direction
@@ -76,6 +78,7 @@ export default function AuthModal({
     setIsAuthModalVisible,
     setIsLoading,
     sendOtpToEmailAddress,
+    handleVerifyResetPasswordOtp,
   } = useAuth();
   const { showToast } = useToast();
   const t = useTranslations();
@@ -263,7 +266,13 @@ export default function AuthModal({
     sendOtpToEmailAddress(formData?.email || "", "password-recovery");
   };
 
-  const handleSubmitAfterVerification = () => {
+  const handleSubmitAfterVerification = async () => {
+    const token = await handleVerifyResetPasswordOtp(
+      formData?.email || "",
+      emailOtp
+    );
+    if (!token) return;
+    setResetToken(token);
     setActivePanel(9);
     // setIsAuthModalVisible(false);
     showToast({
@@ -388,7 +397,7 @@ export default function AuthModal({
             handleFormChange={handleFormChange}
             formData={formData}
             setFormData={setFormData}
-            emailOtp={emailOtp}
+            resetToken={resetToken}
           />
         </StepperPanel>
       </Stepper>

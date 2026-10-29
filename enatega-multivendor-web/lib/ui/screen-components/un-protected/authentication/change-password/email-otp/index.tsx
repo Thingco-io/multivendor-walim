@@ -104,8 +104,7 @@ const VerificationEmailForChangePassword = ({
   };
 
   // Handle form submission
-  // The OTP is validated by the resetPassword mutation; calling verifyOtp here
-  // would mark it as used and make resetPassword reject it.
+  // The parent exchanges the OTP for a reset token before moving on
   const handleSubmit = useDebounceFunction(
     async () => {
       if (otp.join("").length !== 6) {

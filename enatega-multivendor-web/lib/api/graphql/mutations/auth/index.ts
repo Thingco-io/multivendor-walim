@@ -76,6 +76,13 @@ export const FORGOT_PASSWORD = gql`
     }
   }
 `;
+export const VERIFY_RESET_PASSWORD_OTP = gql`
+  mutation VerifyResetPasswordOtp($email: String!, $otp: String!) {
+    verifyResetPasswordOtp(email: $email, otp: $otp) {
+      token
+    }
+  }
+`;
 export const RESET_PASSWORD = gql`
   mutation ResetPassword($password: String!, $email: String!, $otp: String!) {
     resetPassword(password: $password, email: $email, otp: $otp) {

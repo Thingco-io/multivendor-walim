@@ -30,6 +30,7 @@ import {
   RESET_PASSWORD_WITH_TOKEN,
   SENT_OTP_TO_EMAIL,
   SENT_OTP_TO_PHONE,
+  VERIFY_RESET_PASSWORD_OTP,
 } from "@/lib/api/graphql";
 
 // Interface & Types
@@ -126,6 +127,10 @@ export default function AuthProvider({ children }: { children: ReactNode }) {
     { resetPassword: { result: boolean } },
     undefined | { password: string; email: string; token: string }
   >(RESET_PASSWORD_WITH_TOKEN);
+  const [mutateVerifyResetPasswordOtp] = useMutation<
+    { verifyResetPasswordOtp: { token: string } },
+    undefined | { email: string; otp: string }
+  >(VERIFY_RESET_PASSWORD_OTP);
 
   // Checkers
   const checkEmailExists = useCallback(async (email: string): Promise<boolean> => {
@@ -224,6 +229,32 @@ export default function AuthProvider({ children }: { children: ReactNode }) {
       setIsLoading(false);
     }
   }, [mutateResetPassword, mutateResetPasswordWithToken, showToast, t]);
+
+  // Exchanges the emailed OTP for a single-use reset token
+  const handleVerifyResetPasswordOtp = useCallback(async (
+    email: string,
+    otp: string
+  ): Promise<string | null> => {
+    try {
+      setIsLoading(true);
+      const response = await mutateVerifyResetPasswordOtp({
+        variables: { email, otp },
+      });
+      return response.data?.verifyResetPasswordOtp?.token ?? null;
+    } catch (err) {
+      const error = err as ApolloError;
+      console.error("Error while verifying reset password OTP:", error);
+      showToast({
+        type: "error",
+        title: t("password_reset_error"),
+        message: error.graphQLErrors?.[0]?.message || error.message,
+        duration: 3000
+      });
+      return null;
+    } finally {
+      setIsLoading(false);
+    }
+  }, [mutateVerifyResetPasswordOtp, showToast, t]);
 
   const handleForgotPassword = useCallback(async (email: string) => {
     try {
@@ -611,6 +642,7 @@ export default function AuthProvider({ children }: { children: ReactNode }) {
       refetchProfileData,
       setRefetchProfileData,
       handlePasswordReset,
+      handleVerifyResetPasswordOtp,
     }),
     [
       authToken,
@@ -637,6 +669,7 @@ export default function AuthProvider({ children }: { children: ReactNode }) {
       refetchProfileData,
       setRefetchProfileData,
       handlePasswordReset,
+      handleVerifyResetPasswordOtp,
     ]
   );
 

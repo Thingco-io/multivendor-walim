@@ -14,7 +14,7 @@ export default function ChangePassword({
   handleFormChange,
   setFormData,
   formData,
-  emailOtp,
+  resetToken,
 }: IEnterPasswordProps) {
   // Hooks
   const t = useTranslations();
@@ -35,9 +35,8 @@ export default function ChangePassword({
       await handlePasswordReset(
         formData?.password || '',
         formData?.email || '',
-        '',
-        setFormData,
-        emailOtp
+        resetToken,
+        setFormData
       );
     } catch (error) {
       showToast({

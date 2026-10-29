@@ -90,6 +90,7 @@ export interface IAuthContextProps {
   refetchProfileData: boolean;
   setRefetchProfileData: Dispatch<SetStateAction<boolean>>;
   handlePasswordReset: (password: string, email: string, token?: string, setFormData?: Dispatch<SetStateAction<IAuthFormData>>, otp?: string) => Promise<void>;
+  handleVerifyResetPasswordOtp: (email: string, otp: string) => Promise<string | null>;
 }
 export interface ILoginProfile {
   userId?: string;
@@ -160,7 +161,7 @@ export interface IEnterPasswordProps {
   handleFormChange: (name: string, value: string) => void;
   setFormData: Dispatch<SetStateAction<IAuthFormData>>;
   formData: IAuthFormData;
-  emailOtp?: string;
+  resetToken?: string;
 }
 
 export interface IUserAddressComponentProps {
