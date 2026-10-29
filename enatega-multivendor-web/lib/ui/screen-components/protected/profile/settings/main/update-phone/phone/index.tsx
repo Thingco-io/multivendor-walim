@@ -10,7 +10,7 @@ import { useTranslations } from "next-intl";
 export interface IPhoneEntryProps {
   handleChange: (val: string) => void;
   user: IUser | null;
-  handleSubmit: () => void;
+  handleSubmit: () => Promise<void>;
   handleUpdatePhoneModal: () => void;
   userPhone?: string;
 }

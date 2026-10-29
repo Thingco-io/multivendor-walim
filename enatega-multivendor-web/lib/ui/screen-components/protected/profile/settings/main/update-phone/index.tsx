@@ -84,7 +84,8 @@ export default function UpdatePhoneModal({
     }))
   }
 
- const handleSubmit = useDebounceFunction(async () => { 
+  // Not debounced: PhoneEntry awaits this to keep the Save button loading until the OTP step opens
+  const handleSubmit = async () => {
   try {
     if(!user?.phone || user?.phone.length < 7) {
       showToast({
@@ -111,9 +112,7 @@ export default function UpdatePhoneModal({
       message: t("update_phone_name_send_otp_error"),
     });
   }
-},
-  500, // Debounce time in milliseconds
-)
+};
 
     const handleSubmitAfterVerification = useDebounceFunction(async () => {
       try {
