@@ -915,5 +915,8 @@
   "rider_rating_label": "Rider Rating",
   "Rider_Politeness": "Rider politeness",
   "Delivery_Speed": "Delivery speed",
-  "Order_Condition": "Order condition"
+  "Order_Condition": "Order condition",
+  "password_missing_requirements_message": "آپ کے پاس ورڈ میں یہ موجود نہیں: {missing}",
+  "password_no_spaces_label": "خالی جگہ (اسپیس) نہیں",
+  "password_allowed_special_characters_label": "اجازت یافتہ خاص حروف: {chars}"
 }

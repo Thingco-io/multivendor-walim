@@ -54,10 +54,40 @@ export default function SignUpWithEmail({
   }, []);
 
   // Validation
-  const validatePassword = (password: string) => {
-    const strongPasswordRegex =
-      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z\d\s])\S{6,}$/;
-    return strongPasswordRegex.test(password);
+  const SPECIAL_CHARACTERS = "!@#$%^&*()-_=+[]{};:'\",.<>/?\\|`~";
+
+  // Returns a message describing what the password is missing, or null if valid
+  const getPasswordError = (password: string) => {
+    const missing: string[] = [];
+    if (password.length < 6) missing.push(t("At_least_6_characters_label"));
+    if (!/[A-Z]/.test(password))
+      missing.push(t("At_least_one_uppercase_letter_(A-Z)_label"));
+    if (!/[a-z]/.test(password))
+      missing.push(t("At_least_one_lowercase_letter_(a-z)_label"));
+    if (!/\d/.test(password))
+      missing.push(t("At_least_one_number_(0-9)_label"));
+    const hasSpecial = [...password].some((c) =>
+      SPECIAL_CHARACTERS.includes(c)
+    );
+    if (!hasSpecial) missing.push(t("At_least_one_special_character"));
+
+    const parts: string[] = [];
+    if (missing.length) {
+      parts.push(
+        t("password_missing_requirements_message", {
+          missing: missing.join(", "),
+        })
+      );
+    }
+    if (/\s/.test(password)) parts.push(t("password_no_spaces_label"));
+    if (!hasSpecial) {
+      parts.push(
+        t("password_allowed_special_characters_label", {
+          chars: SPECIAL_CHARACTERS.split("").join(" "),
+        })
+      );
+    }
+    return parts.length ? parts.join(". ") : null;
   };
 
   // Handlers
@@ -100,11 +130,12 @@ export default function SignUpWithEmail({
       }
 
       // Password strength
-      if (!validatePassword(formData.password || "")) {
+      const passwordError = getPasswordError(formData.password || "");
+      if (passwordError) {
         showToast({
           type: "error",
           title: t("create_user_label"),
-          message: t("password_not_strong_enough_message"),
+          message: passwordError,
         });
         return;
       }

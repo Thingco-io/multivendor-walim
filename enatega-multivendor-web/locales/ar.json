@@ -927,5 +927,8 @@
   "rider_rating_label": "Rider Rating",
   "Rider_Politeness": "Rider politeness",
   "Delivery_Speed": "Delivery speed",
-  "Order_Condition": "Order condition"
+  "Order_Condition": "Order condition",
+  "password_missing_requirements_message": "كلمة المرور تفتقد إلى: {missing}",
+  "password_no_spaces_label": "بدون مسافات",
+  "password_allowed_special_characters_label": "الرموز الخاصة المسموح بها: {chars}"
 }
