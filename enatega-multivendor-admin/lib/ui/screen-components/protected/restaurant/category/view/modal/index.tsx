@@ -31,6 +31,7 @@ export default function SubCategoriesPreiwModal({
       variables: {
         parentCategoryId: subCategoryParentId,
       },
+      skip: !subCategoryParentId,
     }) as QueryResult<
       ISubCategoryByParentIdResponse | undefined,
       { parentCategoryId: string }

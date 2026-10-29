@@ -69,6 +69,7 @@ export default function CategoryAddForm({
     variables: {
       parentCategoryId: category?._id,
     },
+    skip: !category?._id,
   });
   const { restaurantLayoutContextData } = useContext(RestaurantLayoutContext);
   const restaurantId = restaurantLayoutContextData?.restaurantId || '';
@@ -218,7 +219,7 @@ export default function CategoryAddForm({
     }
   };
   useEffect(() => {
-    refetchSubCatrgories();
+    if (category?._id) refetchSubCatrgories();
   }, [isAddCategoryVisible]);
   if (subCategoriesLoading) return <CustomLoader />;
   if (!subCategoriesLoading)
