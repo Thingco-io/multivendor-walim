@@ -170,7 +170,7 @@ export default function FoodDetails({
 
     onSetFoodContextData({
       food: {
-        _id: '',
+        _id: foodContextData?.food?._id ?? '',
         data: foodData,
         variations:
           (foodContextData?.food?.variations ?? []).length > 0
