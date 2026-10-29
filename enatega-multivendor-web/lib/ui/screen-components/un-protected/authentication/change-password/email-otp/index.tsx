@@ -10,7 +10,6 @@ import { IVerificationEmailForChangePasswordProps } from "@/lib/utils/interfaces
 import EmailIcon from "@/public/assets/images/svgs/email";
 
 // Hooks
-import useVerifyOtp from "@/lib/hooks/useVerifyOtp";
 import { useTranslations } from "next-intl";
 
 const VerificationEmailForChangePassword = ({
@@ -23,7 +22,6 @@ const VerificationEmailForChangePassword = ({
   const [otp, setOtp] = useState<string[]>(Array(6).fill(""));
   const inputRefs = useRef<(HTMLInputElement | null)[]>([]);
   const { showToast } = useToast();
-  const { verifyOTP, error } = useVerifyOtp();
 
   // Hooks
   const t = useTranslations();
@@ -106,46 +104,21 @@ const VerificationEmailForChangePassword = ({
   };
 
   // Handle form submission
+  // The OTP is validated by the resetPassword mutation; calling verifyOtp here
+  // would mark it as used and make resetPassword reject it.
   const handleSubmit = useDebounceFunction(
     async () => {
-      try {
-        const otpResponse = await verifyOTP({
-          variables: {
-            otp: emailOtp,
-            email: formData?.email,
-          },
-        });
-
-        if (otp.join("").length !== 6 || !otpResponse?.data?.verifyOtp) {
-          return showToast({
-            type: "error",
-            title:t("toast_error"),
-            message: t("update_phone_name_otp_error_msg"),
-          });
-        } else {
-          handleSubmitAfterVerification();
-        }
-      } catch (error) {
-        showToast({
+      if (otp.join("").length !== 6) {
+        return showToast({
           type: "error",
           title: t("toast_error"),
-          message: t("error_occurred_while_verifying_email_message"),
+          message: t("update_phone_name_otp_error_msg"),
         });
       }
+      handleSubmitAfterVerification();
     },
     500 // Debounce time in milliseconds
   );
-
-  // useEffect for displaying otp verification error
-  useEffect(() => {
-    if (error) {
-      showToast({
-        type: "error",
-        title: t("otp_error_label"),
-        message: t("invalid_otp"),
-      });
-    }
-  }, [error]);
 
   return (
     <div className="flex flex-col items-start justify-start w-full h-full px-4 py-6 md:px-8 dark:bg-gray-900 dark:text-white ">

@@ -120,7 +120,7 @@ export default function AuthProvider({ children }: { children: ReactNode }) {
   >(FORGOT_PASSWORD);
   const [mutateResetPassword] = useMutation<
     { resetPassword: { result: boolean } },
-    undefined | { password: string; email: string }
+    undefined | { password: string; email: string; otp: string }
   >(RESET_PASSWORD);
   const [mutateResetPasswordWithToken] = useMutation<
     { resetPassword: { result: boolean } },
@@ -189,7 +189,8 @@ export default function AuthProvider({ children }: { children: ReactNode }) {
     password: string,
     email: string,
     token?: string,
-    setFormData?: Dispatch<SetStateAction<IAuthFormData>>
+    setFormData?: Dispatch<SetStateAction<IAuthFormData>>,
+    otp?: string
   ) => {
     try {
       setIsLoading(true);
@@ -198,7 +199,7 @@ export default function AuthProvider({ children }: { children: ReactNode }) {
             variables: { password, email, token },
           })
         : await mutateResetPassword({
-            variables: { password, email },
+            variables: { password, email, otp: otp || "" },
           });
       if (resetPasswordResponse?.data?.resetPassword?.result === true) {
         showToast({

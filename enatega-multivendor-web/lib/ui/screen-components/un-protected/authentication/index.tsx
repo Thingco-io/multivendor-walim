@@ -388,6 +388,7 @@ export default function AuthModal({
             handleFormChange={handleFormChange}
             formData={formData}
             setFormData={setFormData}
+            emailOtp={emailOtp}
           />
         </StepperPanel>
       </Stepper>
