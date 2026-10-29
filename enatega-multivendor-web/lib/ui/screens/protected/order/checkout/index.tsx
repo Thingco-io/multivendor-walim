@@ -1300,9 +1300,10 @@ export default function OrderCheckoutScreen() {
                       className="text-gray-600 dark:text-gray-300 flex items-center text-sm sm:text-base md:text-[12px] lg:text-[12px] xl:text-[14px]"
                       htmlFor="card"
                     >
-                      <span className="font-medium pr-1">
-                        {CURRENCY_SYMBOL}
-                      </span>
+                      <FontAwesomeIcon
+                        icon={paymentMethodItem.icon}
+                        className="w-4 mr-2 text-gray-700 dark:text-gray-200"
+                      />
                       {t(paymentMethodItem.label)}
                     </label>
                     <input
